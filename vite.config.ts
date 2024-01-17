@@ -18,7 +18,7 @@ export default defineConfig({
     }),
     tsconfigPaths(),
   ],
-  base: "/pale-pass/",
+  base: "/pale-pass-2/",
   server: {
     open: true,
     port: 3000,
