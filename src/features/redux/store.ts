@@ -45,7 +45,7 @@ export const store = configureStore({
 });
 export const persistor = persistStore(store, {
   // Ensures saved game is not loaded without user action
-  manualPersist: true,
+  // manualPersist: true,
 } as unknown as PersistorOptions);
 
 export type RootState = ReturnType<typeof store.getState>;

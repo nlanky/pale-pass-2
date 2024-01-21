@@ -5,17 +5,17 @@ import ReactDOM from "react-dom/client";
 // PUBLIC MODULES
 import { ThemeProvider } from "@mui/material";
 import { Provider } from "react-redux";
+import { BrowserRouter as Router } from "react-router-dom";
 import { PersistGate } from "redux-persist/integration/react";
 
 // LOCAL FILES
 // Components
-import { Router } from "features/system/components";
-// CSS
-import "@fontsource/cormorant-garamond";
-import "main.css";
+import { App } from "App";
 // Redux
 import { persistor, store } from "features/redux/store";
-// Theme
+// Styling
+import "@fontsource/cormorant-garamond";
+import "main.css";
 import { theme } from "features/common/theme";
 
 ReactDOM.createRoot(
@@ -24,8 +24,10 @@ ReactDOM.createRoot(
   <StrictMode>
     <ThemeProvider theme={theme}>
       <Provider store={store}>
-        <PersistGate loading={<Router />} persistor={persistor}>
-          <Router />
+        <PersistGate loading={null} persistor={persistor}>
+          <Router basename="/pale-pass-2">
+            <App />
+          </Router>
         </PersistGate>
       </Provider>
     </ThemeProvider>

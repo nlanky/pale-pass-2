@@ -1,1 +1,1 @@
-export { TownView } from "features/town/components/TownView";
+export * from "features/town/components/TownView";
