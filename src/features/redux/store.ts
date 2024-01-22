@@ -16,9 +16,11 @@ import storage from "redux-persist/lib/storage";
 // LOCAL FILES
 // Redux
 import { systemReducer } from "features/system/systemSlice";
+import { townReducer } from "features/town/townSlice";
 
 const rootReducer = combineReducers({
   system: systemReducer,
+  town: townReducer,
 });
 
 const persistConfig = {

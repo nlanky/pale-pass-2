@@ -17,8 +17,8 @@ repair phase
 requirements
 */
 
-export const BUILDINGS: Building[] = [
-  new Building({
+export const BUILDING_ID_TO_BUILDING: Record<number, Building> = {
+  1: new Building({
     id: 1,
     name: "Housing",
     descriptions: [{ tier: 1, text: "Housing tier 1" }],
@@ -26,4 +26,4 @@ export const BUILDINGS: Building[] = [
     position: { x: 0.28, y: 0.55 },
     maxTier: 1,
   }),
-];
+};

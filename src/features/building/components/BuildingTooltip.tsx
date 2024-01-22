@@ -6,7 +6,11 @@ import { Box, Typography } from "@mui/material";
 
 // LOCAL FILES
 // Classes
-import { Building } from "features/building/classes";
+import type { Building } from "features/building/classes";
+// Hooks
+import { useAppSelector } from "features/redux/hooks";
+// Redux
+import { selectTownBuilding } from "features/town/selectors";
 
 interface BuildingTooltipProps {
   building: Building;
@@ -15,16 +19,26 @@ interface BuildingTooltipProps {
 export const BuildingTooltip: FC<BuildingTooltipProps> = ({
   building,
 }) => {
-  const { name } = building;
+  const { id, name } = building;
 
-  // TODO Building state
-  const tier = 1;
+  // Hooks
+  const townBuilding = useAppSelector((state) =>
+    selectTownBuilding(state, id),
+  );
+
+  // Derived variables
+  const canBuild = townBuilding === undefined;
+  const currentTier = townBuilding?.tier;
+  const title = `${name}${
+    currentTier ? ` - Tier ${currentTier}` : ""
+  }`;
 
   return (
     <Box>
-      <Typography variant="body1">
-        {name} - Tier {tier}
-      </Typography>
+      <Typography variant="body1">{title}</Typography>
+      {canBuild && (
+        <Typography variant="body1">Available to build</Typography>
+      )}
     </Box>
   );
 };
