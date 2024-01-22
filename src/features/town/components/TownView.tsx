@@ -34,6 +34,7 @@ import {
 } from "features/town/actions";
 import {
   selectBuildingIdToAssignedVillagerIds,
+  selectTownBuildingIds,
   selectUnassignedVillagers,
   selectVillagersAvailableToRecruit,
 } from "features/town/selectors";
@@ -52,6 +53,7 @@ export const TownView = () => {
   const villagersAvailableToRecruit = useAppSelector(
     selectVillagersAvailableToRecruit,
   );
+  const townBuildingIds = useAppSelector(selectTownBuildingIds);
 
   // Handlers
   const onRecruit = (villager: Villager) => {
@@ -72,6 +74,15 @@ export const TownView = () => {
     const villagerId = Number(
       event.dataTransfer.getData("text/plain"),
     );
+    if (isNaN(villagerId)) {
+      return;
+    }
+
+    if (assign && !townBuildingIds.includes(buildingId)) {
+      alert("You must build the building before assigning villagers");
+      return;
+    }
+
     if (assign) {
       dispatch(assignVillager({ villagerId, buildingId }));
     } else {
