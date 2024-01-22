@@ -2,9 +2,12 @@
 import { createSelector } from "@reduxjs/toolkit";
 
 // LOCAL FILES
+// Constants
+import { VILLAGER_ID_TO_VILLAGER } from "features/villager/constants";
 // Interfaces & Types
 import type { RootState } from "features/redux/store";
-import { VILLAGER_ID_TO_VILLAGER } from "features/villager/constants";
+// Utility functions
+import { addItemToArray } from "features/common/utils";
 
 // BUILDINGS
 export const selectTownBuildingIdToBuilding = (state: RootState) =>
@@ -56,5 +59,37 @@ export const selectUnassignedVillagers = createSelector(
   (townVillagers) =>
     townVillagers.filter(
       (townVillager) => townVillager.assignedBuildingId === null,
+    ),
+);
+export const selectAssignedVillagers = createSelector(
+  [selectTownVillagers],
+  (townVillagers) =>
+    townVillagers.filter(
+      (townVillager) => townVillager.assignedBuildingId !== null,
+    ),
+);
+export const selectBuildingIdToAssignedVillagerIds = createSelector(
+  [selectAssignedVillagers],
+  (townVillagers) =>
+    townVillagers.reduce<Record<number, number[]>>(
+      (buildingIdToVillagerIds, townVillager) => {
+        const { id, assignedBuildingId } = townVillager;
+        if (!assignedBuildingId) {
+          return buildingIdToVillagerIds;
+        }
+
+        if (!buildingIdToVillagerIds[assignedBuildingId]) {
+          buildingIdToVillagerIds[assignedBuildingId] = [id];
+        } else {
+          buildingIdToVillagerIds[assignedBuildingId] =
+            addItemToArray(
+              buildingIdToVillagerIds[assignedBuildingId],
+              id,
+            );
+        }
+
+        return buildingIdToVillagerIds;
+      },
+      {},
     ),
 );
