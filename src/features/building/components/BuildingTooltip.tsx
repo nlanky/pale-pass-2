@@ -6,7 +6,7 @@ import { Box, Typography } from "@mui/material";
 
 // LOCAL FILES
 // Classes
-import type { Building } from "features/building/classes";
+import type { Building } from "features/building/types";
 // Hooks
 import { useAppSelector } from "features/redux/hooks";
 // Redux

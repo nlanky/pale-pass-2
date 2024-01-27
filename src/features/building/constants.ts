@@ -1,6 +1,6 @@
 // LOCAL FILES
-// Classes
-import { Building } from "features/building/classes";
+// Interfaces & Types
+import type { Building } from "features/building/types";
 
 /*
 TODO
@@ -18,12 +18,12 @@ requirements
 */
 
 export const BUILDING_ID_TO_BUILDING: Record<number, Building> = {
-  1: new Building({
+  1: {
     id: 1,
     name: "Housing",
     descriptions: [{ tier: 1, text: "Housing tier 1" }],
     images: [],
     position: { x: 0.28, y: 0.55 },
     maxTier: 1,
-  }),
+  },
 };

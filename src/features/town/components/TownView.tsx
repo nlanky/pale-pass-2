@@ -1,5 +1,5 @@
 // REACT
-import type { DragEvent } from "react";
+import { useState, type DragEvent } from "react";
 
 // PUBLIC MODULES
 import {
@@ -15,8 +15,6 @@ import { useNavigate } from "react-router-dom";
 // LOCAL FILES
 // Assets
 import { townTier1Image } from "assets/town";
-// Classes
-import type { Villager } from "features/villager/classes";
 // Components
 import { BuildingTooltip } from "features/building/components";
 import { Image } from "features/common/components";
@@ -26,6 +24,8 @@ import { VILLAGER_ID_TO_VILLAGER } from "features/villager/constants";
 // Hooks
 import { useImageDimensions } from "features/common/hooks";
 import { useAppDispatch, useAppSelector } from "features/redux/hooks";
+// Interfaces & Types
+import type { Villager } from "features/villager/types";
 // Redux
 import {
   assignVillager,
@@ -55,6 +55,9 @@ export const TownView = () => {
   );
   const townBuildingIds = useAppSelector(selectTownBuildingIds);
 
+  // Local state
+  const [assigningVillager, setAssigningVillager] = useState(false);
+
   // Handlers
   const onRecruit = (villager: Villager) => {
     dispatch(recruitVillager(villager));
@@ -65,6 +68,10 @@ export const TownView = () => {
   ) => {
     event.dataTransfer.dropEffect = "move";
     event.dataTransfer.setData("text/plain", villagerId.toString());
+    setAssigningVillager(true);
+  };
+  const onVillagerDragEnd = () => {
+    setAssigningVillager(false);
   };
   const onVillagerDrop = (
     event: DragEvent<HTMLDivElement>,
@@ -88,6 +95,8 @@ export const TownView = () => {
     } else {
       dispatch(unassignVillager(villagerId));
     }
+
+    onVillagerDragEnd();
   };
 
   return (
@@ -114,25 +123,30 @@ export const TownView = () => {
                 onDrop={(event) => {
                   onVillagerDrop(event, building.id, true);
                 }}
-                sx={{
-                  position: "absolute",
-                  top:
-                    building.position.y * townImageDimensions.height,
-                  left:
-                    building.position.x * townImageDimensions.width,
-                  width: 0.075 * townImageDimensions.width,
-                  height: 0.075 * townImageDimensions.height,
-                  cursor: "pointer",
-                  "&:hover": {
+                sx={[
+                  {
+                    position: "absolute",
+                    top:
+                      building.position.y *
+                      townImageDimensions.height,
+                    left:
+                      building.position.x * townImageDimensions.width,
+                    width: 0.075 * townImageDimensions.width,
+                    height: 0.075 * townImageDimensions.height,
+                    cursor: "pointer",
+                  },
+                  assigningVillager && {
                     border: "2px solid white",
                   },
-                }}
+                ]}
               >
                 {/* ASSIGNED VILLAGERS */}
                 {Object.values(
                   buildingIdToAssignedVillagerIds[building.id] || {},
                 ).map((villagerId) => (
                   <Avatar
+                    key={villagerId}
+                    onDragEnd={onVillagerDragEnd}
                     onDragStart={(event) => {
                       onVillagerDragStart(event, villagerId);
                     }}
@@ -152,6 +166,7 @@ export const TownView = () => {
           </Typography>
           {villagersAvailableToRecruit.map((villager) => (
             <Avatar
+              key={villager.id}
               onClick={() => {
                 onRecruit(villager);
               }}
@@ -165,7 +180,9 @@ export const TownView = () => {
             const villager = VILLAGER_ID_TO_VILLAGER[townVillager.id];
             return (
               <Avatar
+                key={townVillager.id}
                 draggable
+                onDragEnd={onVillagerDragEnd}
                 onDragStart={(event) => {
                   onVillagerDragStart(event, townVillager.id);
                 }}

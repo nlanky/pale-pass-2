@@ -2,9 +2,9 @@
 import { createAction } from "@reduxjs/toolkit";
 
 // LOCAL FILES
-// Classes
-import { Building } from "features/building/classes";
-import { Villager } from "features/villager/classes";
+// Interfaces & Types
+import type { Building } from "features/building/types";
+import type { Villager } from "features/villager/types";
 
 export const buildBuilding = createAction<Building>(
   "town/buildBuilding",
