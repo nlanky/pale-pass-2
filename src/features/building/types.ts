@@ -5,7 +5,8 @@ export interface BuildingDescription {
 
 export interface BuildingImage {
   tier: number;
-  image: string;
+  exterior: string;
+  interior: string;
 }
 
 export interface BuildingPosition {

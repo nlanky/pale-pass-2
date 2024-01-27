@@ -8,6 +8,8 @@ import { VILLAGER_ID_TO_VILLAGER } from "features/villager/constants";
 import type { RootState } from "features/redux/store";
 // Utility functions
 import { addItemToArray } from "features/common/utils";
+import { BUILDING_ID_TO_BUILDING } from "features/building/constants";
+import { getBuildingImage } from "features/building/utils";
 
 // BUILDINGS
 export const selectTownBuildingIdToBuilding = (state: RootState) =>
@@ -30,6 +32,15 @@ export const selectTownBuilding = createSelector(
   ],
   (buildingIdToBuilding, buildingId) =>
     buildingIdToBuilding[buildingId],
+);
+export const selectTownBuildingTier = createSelector(
+  [selectTownBuilding],
+  (townBuilding) => townBuilding?.tier,
+);
+export const selectTownBuildingImage = createSelector(
+  [(_, buildingId: number) => buildingId, selectTownBuildingTier],
+  (buildingId, tier) =>
+    getBuildingImage(BUILDING_ID_TO_BUILDING[buildingId], tier),
 );
 
 // VILLAGERS

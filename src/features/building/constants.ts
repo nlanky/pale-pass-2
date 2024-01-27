@@ -1,4 +1,9 @@
 // LOCAL FILES
+// Assets
+import {
+  building001ExteriorImage,
+  building001InteriorImage,
+} from "assets/building";
 // Interfaces & Types
 import type { Building } from "features/building/types";
 
@@ -22,7 +27,13 @@ export const BUILDING_ID_TO_BUILDING: Record<number, Building> = {
     id: 1,
     name: "Housing",
     descriptions: [{ tier: 1, text: "Housing tier 1" }],
-    images: [],
+    images: [
+      {
+        tier: 1,
+        exterior: building001ExteriorImage,
+        interior: building001InteriorImage,
+      },
+    ],
     position: { x: 0.28, y: 0.55 },
     maxTier: 1,
   },

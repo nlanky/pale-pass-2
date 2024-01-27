@@ -5,10 +5,10 @@ import { useState, type DragEvent } from "react";
 import {
   Avatar,
   Box,
-  Container,
   Grid,
   Tooltip,
   Typography,
+  useTheme,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
@@ -17,7 +17,11 @@ import { useNavigate } from "react-router-dom";
 import { townTier1Image } from "assets/town";
 // Components
 import { BuildingTooltip } from "features/building/components";
-import { Image } from "features/common/components";
+import {
+  Image,
+  StyledBox,
+  StyledContainer,
+} from "features/common/components";
 // Constants
 import { BUILDING_ID_TO_BUILDING } from "features/building/constants";
 import { VILLAGER_ID_TO_VILLAGER } from "features/villager/constants";
@@ -43,6 +47,7 @@ export const TownView = () => {
   // Hooks
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const theme = useTheme();
   const townImageDimensions = useImageDimensions(townTier1Image);
   const buildingIdToAssignedVillagerIds = useAppSelector(
     selectBuildingIdToAssignedVillagerIds,
@@ -100,10 +105,13 @@ export const TownView = () => {
   };
 
   return (
-    <Container maxWidth="lg">
+    <StyledContainer>
       <Grid container>
         <Grid item sx={{ position: "relative" }} xs={9}>
-          <Image src={townTier1Image} style={{ width: "100%" }} />
+          <Image
+            src={townTier1Image}
+            style={{ width: "100%", marginBottom: theme.spacing(1) }}
+          />
 
           {/* BUILDINGS */}
           {Object.values(BUILDING_ID_TO_BUILDING).map((building) => (
@@ -141,56 +149,95 @@ export const TownView = () => {
                 ]}
               >
                 {/* ASSIGNED VILLAGERS */}
-                {Object.values(
-                  buildingIdToAssignedVillagerIds[building.id] || {},
-                ).map((villagerId) => (
-                  <Avatar
-                    key={villagerId}
-                    onDragEnd={onVillagerDragEnd}
-                    onDragStart={(event) => {
-                      onVillagerDragStart(event, villagerId);
-                    }}
-                    src={VILLAGER_ID_TO_VILLAGER[villagerId].image}
-                    sx={{
-                      position: "absolute",
-                    }}
-                  />
-                ))}
+                <Grid
+                  container
+                  sx={{
+                    position: "absolute",
+                  }}
+                  wrap="nowrap"
+                >
+                  {Object.values(
+                    buildingIdToAssignedVillagerIds[building.id] ||
+                      {},
+                  ).map((villagerId) => (
+                    <Avatar
+                      key={villagerId}
+                      onDragEnd={onVillagerDragEnd}
+                      onDragStart={(event) => {
+                        onVillagerDragStart(event, villagerId);
+                      }}
+                      src={VILLAGER_ID_TO_VILLAGER[villagerId].image}
+                    />
+                  ))}
+                </Grid>
               </Box>
             </Tooltip>
           ))}
 
           {/* VILLAGERS TO RECRUIT */}
-          <Typography variant="body1">
-            Available to recruit
-          </Typography>
-          {villagersAvailableToRecruit.map((villager) => (
-            <Avatar
-              key={villager.id}
-              onClick={() => {
-                onRecruit(villager);
-              }}
-              src={villager.image}
-            />
-          ))}
+          <StyledBox sx={{ width: 1, p: 1, mb: 1 }}>
+            <Typography sx={{ mb: 1 }} variant="body1">
+              Available to recruit
+            </Typography>
+
+            {villagersAvailableToRecruit.length === 0 && (
+              <Typography variant="body1">
+                No villagers available
+              </Typography>
+            )}
+
+            <Grid container spacing={1}>
+              {villagersAvailableToRecruit.map((villager) => (
+                <Grid key={villager.id} item>
+                  <Avatar
+                    onClick={() => {
+                      onRecruit(villager);
+                    }}
+                    src={villager.image}
+                    sx={{
+                      cursor: "pointer",
+                    }}
+                  />
+                </Grid>
+              ))}
+            </Grid>
+          </StyledBox>
 
           {/* UNASSIGNED VILLAGERS */}
-          <Typography variant="body1">Unassigned</Typography>
-          {unassignedTownVillagers.map((townVillager) => {
-            const villager = VILLAGER_ID_TO_VILLAGER[townVillager.id];
-            return (
-              <Avatar
-                key={townVillager.id}
-                draggable
-                onDragEnd={onVillagerDragEnd}
-                onDragStart={(event) => {
-                  onVillagerDragStart(event, townVillager.id);
-                }}
-                src={villager.image}
-              />
-            );
-          })}
-          <Box
+          <StyledBox sx={{ width: 1, p: 1, mb: 1 }}>
+            <Typography sx={{ mb: 1 }} variant="body1">
+              Unassigned Villagers
+            </Typography>
+
+            {unassignedTownVillagers.length === 0 && (
+              <Typography variant="body1">
+                No villagers to assign
+              </Typography>
+            )}
+
+            <Grid container spacing={1}>
+              {unassignedTownVillagers.map((townVillager) => {
+                const villager =
+                  VILLAGER_ID_TO_VILLAGER[townVillager.id];
+                return (
+                  <Grid key={townVillager.id} item>
+                    <Avatar
+                      key={townVillager.id}
+                      draggable
+                      onDragEnd={onVillagerDragEnd}
+                      onDragStart={(event) => {
+                        onVillagerDragStart(event, townVillager.id);
+                      }}
+                      src={villager.image}
+                    />
+                  </Grid>
+                );
+              })}
+            </Grid>
+          </StyledBox>
+
+          {/* UNASSIGN VILLAGERS */}
+          <StyledBox
             alignItems="center"
             display="flex"
             justifyContent="center"
@@ -204,16 +251,15 @@ export const TownView = () => {
             sx={{
               width: "100%",
               height: 50,
-              border: "1px solid black",
             }}
           >
             <Typography variant="body1">
               Drag villager here to unassign
             </Typography>
-          </Box>
+          </StyledBox>
         </Grid>
         <Grid item xs={3}></Grid>
       </Grid>
-    </Container>
+    </StyledContainer>
   );
 };

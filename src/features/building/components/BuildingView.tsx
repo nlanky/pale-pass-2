@@ -1,10 +1,20 @@
 // PUBLIC MODULES
 import { Button, Container, Typography } from "@mui/material";
-import { useAppDispatch, useAppSelector } from "features/redux/hooks";
-import { selectTownBuilding } from "features/town/selectors";
 import { useNavigate, useParams } from "react-router-dom";
-import { BUILDING_ID_TO_BUILDING } from "../constants";
+
+// LOCAL FILES
+// Components
+import { Image, StyledBox } from "features/common/components";
+// Constants
+import { BUILDING_ID_TO_BUILDING } from "features/building/constants";
+// Hooks
+import { useAppDispatch, useAppSelector } from "features/redux/hooks";
+// Redux
 import { buildBuilding } from "features/town/actions";
+import {
+  selectTownBuildingImage,
+  selectTownBuildingTier,
+} from "features/town/selectors";
 
 export const BuildingView = () => {
   // Hooks
@@ -23,8 +33,11 @@ export const BuildingView = () => {
 
   // Hooks
   const dispatch = useAppDispatch();
-  const townBuilding = useAppSelector((state) =>
-    selectTownBuilding(state, buildingId),
+  const currentTier = useAppSelector((state) =>
+    selectTownBuildingTier(state, buildingId),
+  );
+  const image = useAppSelector((state) =>
+    selectTownBuildingImage(state, buildingId),
   );
 
   // Handlers
@@ -37,17 +50,34 @@ export const BuildingView = () => {
   };
 
   // Derived variables
-  const canBuild = townBuilding === undefined;
-  const currentTier = townBuilding?.tier;
+  const canBuild = currentTier === undefined;
   const title = `${building.name}${
     currentTier ? ` - Tier ${currentTier}` : ""
   }`;
 
   return (
     <Container maxWidth="lg">
-      <Button onClick={onBackClick}>Back to Town</Button>
-      <Typography variant="body1">{title}</Typography>
-      {canBuild && <Button onClick={onBuild}>Build</Button>}
+      <Button onClick={onBackClick} sx={{ mb: 1 }}>
+        Back to Town
+      </Button>
+      <StyledBox
+        alignItems="flex-start"
+        display="flex"
+        flexDirection="column"
+        sx={{ p: 1 }}
+      >
+        <Typography component="h1" sx={{ mb: 1 }} variant="h4">
+          {title}
+        </Typography>
+
+        <Image src={image?.interior} />
+
+        {canBuild && (
+          <Button onClick={onBuild} sx={{ mt: 1 }}>
+            Build
+          </Button>
+        )}
+      </StyledBox>
     </Container>
   );
 };
