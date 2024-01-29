@@ -7,7 +7,6 @@ import { VILLAGER_ID_TO_VILLAGER } from "features/villager/constants";
 // Interfaces & Types
 import type { RootState } from "features/redux/store";
 // Utility functions
-import { addItemToArray } from "features/common/utils";
 import { BUILDING_ID_TO_BUILDING } from "features/building/constants";
 import { getBuildingImage } from "features/building/utils";
 
@@ -65,42 +64,21 @@ export const selectVillagersAvailableToRecruit = createSelector(
       (villager) => !townVillagerIds.includes(villager.id),
     ),
 );
-export const selectUnassignedVillagers = createSelector(
+export const selectUnassignedVillagerIds = createSelector(
   [selectTownVillagers],
   (townVillagers) =>
-    townVillagers.filter(
-      (townVillager) => townVillager.assignedBuildingId === null,
-    ),
+    townVillagers
+      .filter(
+        (townVillager) => townVillager.assignedBuildingId === null,
+      )
+      .map((townVillager) => townVillager.id),
 );
-export const selectAssignedVillagers = createSelector(
-  [selectTownVillagers],
-  (townVillagers) =>
-    townVillagers.filter(
-      (townVillager) => townVillager.assignedBuildingId !== null,
-    ),
-);
-export const selectBuildingIdToAssignedVillagerIds = createSelector(
-  [selectAssignedVillagers],
-  (townVillagers) =>
-    townVillagers.reduce<Record<number, number[]>>(
-      (buildingIdToVillagerIds, townVillager) => {
-        const { id, assignedBuildingId } = townVillager;
-        if (!assignedBuildingId) {
-          return buildingIdToVillagerIds;
-        }
-
-        if (!buildingIdToVillagerIds[assignedBuildingId]) {
-          buildingIdToVillagerIds[assignedBuildingId] = [id];
-        } else {
-          buildingIdToVillagerIds[assignedBuildingId] =
-            addItemToArray(
-              buildingIdToVillagerIds[assignedBuildingId],
-              id,
-            );
-        }
-
-        return buildingIdToVillagerIds;
-      },
-      {},
-    ),
+export const selectVillagerIdsAssignedToBuilding = createSelector(
+  [selectTownVillagers, (_, buildingId: number) => buildingId],
+  (townVillager, buildingId) =>
+    townVillager
+      .filter(
+        (villager) => villager.assignedBuildingId === buildingId,
+      )
+      .map((villager) => villager.id),
 );

@@ -1,107 +1,59 @@
-// REACT
-import { useState, type DragEvent } from "react";
-
 // PUBLIC MODULES
-import {
-  Avatar,
-  Box,
-  Grid,
-  Tooltip,
-  Typography,
-  useTheme,
-} from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { Avatar, Grid, Typography, useTheme } from "@mui/material";
+import { useDrop } from "react-dnd";
 
 // LOCAL FILES
 // Assets
 import { townTier1Image } from "assets/town";
 // Components
-import { BuildingTooltip } from "features/building/components";
 import {
   Image,
   StyledBox,
   StyledContainer,
 } from "features/common/components";
+import {
+  TownBuildingOverlay,
+  TownVillagerAvatar,
+} from "features/town/components";
 // Constants
 import { BUILDING_ID_TO_BUILDING } from "features/building/constants";
-import { VILLAGER_ID_TO_VILLAGER } from "features/villager/constants";
 // Hooks
-import { useImageDimensions } from "features/common/hooks";
 import { useAppDispatch, useAppSelector } from "features/redux/hooks";
 // Interfaces & Types
 import type { Villager } from "features/villager/types";
 // Redux
 import {
-  assignVillager,
   recruitVillager,
   unassignVillager,
 } from "features/town/actions";
 import {
-  selectBuildingIdToAssignedVillagerIds,
-  selectTownBuildingIds,
-  selectUnassignedVillagers,
+  selectUnassignedVillagerIds,
   selectVillagersAvailableToRecruit,
 } from "features/town/selectors";
 
 export const TownView = () => {
   // Hooks
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
   const theme = useTheme();
-  const townImageDimensions = useImageDimensions(townTier1Image);
-  const buildingIdToAssignedVillagerIds = useAppSelector(
-    selectBuildingIdToAssignedVillagerIds,
-  );
-  const unassignedTownVillagers = useAppSelector(
-    selectUnassignedVillagers,
+  const unassignedTownVillagerIds = useAppSelector(
+    selectUnassignedVillagerIds,
   );
   const villagersAvailableToRecruit = useAppSelector(
     selectVillagersAvailableToRecruit,
   );
-  const townBuildingIds = useAppSelector(selectTownBuildingIds);
-
-  // Local state
-  const [assigningVillager, setAssigningVillager] = useState(false);
+  const [_, drop] = useDrop(
+    () => ({
+      accept: "villager",
+      drop: (item) => {
+        dispatch(unassignVillager((item as any).id));
+      },
+    }),
+    [dispatch],
+  );
 
   // Handlers
   const onRecruit = (villager: Villager) => {
     dispatch(recruitVillager(villager));
-  };
-  const onVillagerDragStart = (
-    event: DragEvent<HTMLDivElement>,
-    villagerId: number,
-  ) => {
-    event.dataTransfer.dropEffect = "move";
-    event.dataTransfer.setData("text/plain", villagerId.toString());
-    setAssigningVillager(true);
-  };
-  const onVillagerDragEnd = () => {
-    setAssigningVillager(false);
-  };
-  const onVillagerDrop = (
-    event: DragEvent<HTMLDivElement>,
-    buildingId: number,
-    assign: boolean,
-  ) => {
-    const villagerId = Number(
-      event.dataTransfer.getData("text/plain"),
-    );
-    if (isNaN(villagerId)) {
-      return;
-    }
-
-    if (assign && !townBuildingIds.includes(buildingId)) {
-      alert("You must build the building before assigning villagers");
-      return;
-    }
-
-    if (assign) {
-      dispatch(assignVillager({ villagerId, buildingId }));
-    } else {
-      dispatch(unassignVillager(villagerId));
-    }
-
-    onVillagerDragEnd();
   };
 
   return (
@@ -114,70 +66,17 @@ export const TownView = () => {
           />
 
           {/* BUILDINGS */}
-          {Object.values(BUILDING_ID_TO_BUILDING).map((building) => (
-            <Tooltip
-              key={building.id}
-              followCursor
-              title={<BuildingTooltip building={building} />}
-            >
-              <Box
-                onClick={() => {
-                  navigate(`/building/${building.id}`);
-                }}
-                onDragOver={(event) => {
-                  event.stopPropagation();
-                  event.preventDefault();
-                }}
-                onDrop={(event) => {
-                  onVillagerDrop(event, building.id, true);
-                }}
-                sx={[
-                  {
-                    position: "absolute",
-                    top:
-                      building.position.y *
-                      townImageDimensions.height,
-                    left:
-                      building.position.x * townImageDimensions.width,
-                    width: 0.075 * townImageDimensions.width,
-                    height: 0.075 * townImageDimensions.height,
-                    cursor: "pointer",
-                  },
-                  assigningVillager && {
-                    border: "2px solid white",
-                  },
-                ]}
-              >
-                {/* ASSIGNED VILLAGERS */}
-                <Grid
-                  container
-                  sx={{
-                    position: "absolute",
-                  }}
-                  wrap="nowrap"
-                >
-                  {Object.values(
-                    buildingIdToAssignedVillagerIds[building.id] ||
-                      {},
-                  ).map((villagerId) => (
-                    <Avatar
-                      key={villagerId}
-                      onDragEnd={onVillagerDragEnd}
-                      onDragStart={(event) => {
-                        onVillagerDragStart(event, villagerId);
-                      }}
-                      src={VILLAGER_ID_TO_VILLAGER[villagerId].image}
-                    />
-                  ))}
-                </Grid>
-              </Box>
-            </Tooltip>
+          {Object.keys(BUILDING_ID_TO_BUILDING).map((buildingId) => (
+            <TownBuildingOverlay
+              key={buildingId}
+              buildingId={Number(buildingId)}
+            />
           ))}
 
           {/* VILLAGERS TO RECRUIT */}
           <StyledBox sx={{ width: 1, p: 1, mb: 1 }}>
             <Typography sx={{ mb: 1 }} variant="body1">
-              Available to recruit
+              Available to Recruit
             </Typography>
 
             {villagersAvailableToRecruit.length === 0 && (
@@ -194,9 +93,6 @@ export const TownView = () => {
                       onRecruit(villager);
                     }}
                     src={villager.image}
-                    sx={{
-                      cursor: "pointer",
-                    }}
                   />
                 </Grid>
               ))}
@@ -209,30 +105,18 @@ export const TownView = () => {
               Unassigned Villagers
             </Typography>
 
-            {unassignedTownVillagers.length === 0 && (
+            {unassignedTownVillagerIds.length === 0 && (
               <Typography variant="body1">
                 No villagers to assign
               </Typography>
             )}
 
             <Grid container spacing={1}>
-              {unassignedTownVillagers.map((townVillager) => {
-                const villager =
-                  VILLAGER_ID_TO_VILLAGER[townVillager.id];
-                return (
-                  <Grid key={townVillager.id} item>
-                    <Avatar
-                      key={townVillager.id}
-                      draggable
-                      onDragEnd={onVillagerDragEnd}
-                      onDragStart={(event) => {
-                        onVillagerDragStart(event, townVillager.id);
-                      }}
-                      src={villager.image}
-                    />
-                  </Grid>
-                );
-              })}
+              {unassignedTownVillagerIds.map((id) => (
+                <Grid key={id} item>
+                  <TownVillagerAvatar villagerId={id} />
+                </Grid>
+              ))}
             </Grid>
           </StyledBox>
 
@@ -241,13 +125,7 @@ export const TownView = () => {
             alignItems="center"
             display="flex"
             justifyContent="center"
-            onDragOver={(event) => {
-              event.stopPropagation();
-              event.preventDefault();
-            }}
-            onDrop={(event) => {
-              onVillagerDrop(event, NaN, false);
-            }}
+            ref={drop}
             sx={{
               width: "100%",
               height: 50,

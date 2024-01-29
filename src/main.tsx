@@ -1,5 +1,7 @@
 // REACT
 import { StrictMode } from "react";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
 import ReactDOM from "react-dom/client";
 
 // PUBLIC MODULES
@@ -26,7 +28,9 @@ ReactDOM.createRoot(
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
           <Router basename="/pale-pass-2">
-            <App />
+            <DndProvider backend={HTML5Backend}>
+              <App />
+            </DndProvider>
           </Router>
         </PersistGate>
       </Provider>
