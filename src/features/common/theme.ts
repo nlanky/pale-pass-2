@@ -53,7 +53,7 @@ export const theme = createTheme({
       fontSize: "1.8rem",
     },
     button: {
-      fontSize: "1.8rem",
+      fontSize: "1.6rem",
     },
   },
   // Utility function for spacing maths

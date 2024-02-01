@@ -3,9 +3,9 @@ import { createSlice } from "@reduxjs/toolkit";
 
 // LOCAL FILES
 // Constants
-import { NO_RESOURCES } from "features/resources/constants";
+import { NO_RESOURCES } from "features/resource/constants";
 // Interfaces & Types
-import type { Resources } from "features/resources/types";
+import type { Resources } from "features/resource/types";
 import type { TownBuilding, TownVillager } from "features/town/types";
 // Redux
 import {

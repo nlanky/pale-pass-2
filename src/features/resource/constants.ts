@@ -9,7 +9,7 @@ import {
   woodImage,
 } from "assets/resource";
 // Interfaces & Types
-import type { Resource, Resources } from "features/resources/types";
+import type { Resource, Resources } from "features/resource/types";
 
 export const NO_RESOURCES: Resources = {
   Wood: 0,

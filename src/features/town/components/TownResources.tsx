@@ -5,9 +5,9 @@ import { Grid, Typography } from "@mui/material";
 // Components
 import { Image, StyledGrid } from "features/common/components";
 // Constants
-import { RESOURCE_TO_IMAGE } from "features/resources/constants";
+import { RESOURCE_TO_IMAGE } from "features/resource/constants";
 // Interfaces & Types
-import type { Resource } from "features/resources/types";
+import type { Resource } from "features/resource/types";
 // Redux
 import { useAppSelector } from "features/redux/hooks";
 import { selectTownResources } from "features/town/selectors";
@@ -21,6 +21,7 @@ export const TownResources = () => {
     <StyledGrid container direction="column" sx={{ px: 1, py: 0.5 }}>
       {(Object.keys(resources) as Resource[]).map((resource) => (
         <Grid
+          key={resource}
           alignItems="center"
           container
           item

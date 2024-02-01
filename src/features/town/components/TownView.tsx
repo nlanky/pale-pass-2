@@ -1,6 +1,13 @@
 // PUBLIC MODULES
-import { Avatar, Grid, Typography, useTheme } from "@mui/material";
+import {
+  Avatar,
+  Button,
+  Grid,
+  Typography,
+  useTheme,
+} from "@mui/material";
 import { useDrop } from "react-dnd";
+import { useNavigate } from "react-router-dom";
 
 // LOCAL FILES
 // Assets
@@ -35,6 +42,7 @@ import {
 export const TownView = () => {
   // Hooks
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const theme = useTheme();
   const unassignedTownVillagerIds = useAppSelector(
     selectUnassignedVillagerIds,
@@ -55,6 +63,10 @@ export const TownView = () => {
   // Handlers
   const onRecruit = (villager: Villager) => {
     dispatch(recruitVillager(villager));
+  };
+
+  const onOverview = () => {
+    navigate("/resources");
   };
 
   return (
@@ -137,8 +149,11 @@ export const TownView = () => {
             </Typography>
           </StyledBox>
         </Grid>
-        <Grid item xs={2}>
+        <Grid container direction="column" item xs={2}>
           <TownResources />
+          <Button onClick={onOverview} sx={{ mt: 1 }}>
+            Overview
+          </Button>
         </Grid>
       </Grid>
     </StyledContainer>
