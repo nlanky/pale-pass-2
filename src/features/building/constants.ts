@@ -34,7 +34,7 @@ export const BUILDING_ID_TO_BUILDING: Record<number, Building> = {
         interior: building001InteriorImage,
       },
     ],
-    position: { x: 0.28, y: 0.55 },
+    position: { x: 0.3, y: 0.59 },
     maxTier: 1,
   },
 };

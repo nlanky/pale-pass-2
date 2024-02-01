@@ -42,6 +42,10 @@ export const selectTownBuildingImage = createSelector(
     getBuildingImage(BUILDING_ID_TO_BUILDING[buildingId], tier),
 );
 
+// RESOURCES
+export const selectTownResources = (state: RootState) =>
+  state.town.resources;
+
 // VILLAGERS
 export const selectTownVillagerIdToVillager = (state: RootState) =>
   state.town.villagerIdToVillager;

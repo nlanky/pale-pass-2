@@ -13,6 +13,7 @@ import {
 } from "features/common/components";
 import {
   TownBuildingOverlay,
+  TownResources,
   TownVillagerAvatar,
 } from "features/town/components";
 // Constants
@@ -44,8 +45,8 @@ export const TownView = () => {
   const [_, drop] = useDrop(
     () => ({
       accept: "villager",
-      drop: (item) => {
-        dispatch(unassignVillager((item as any).id));
+      drop: (item: { id: number }) => {
+        dispatch(unassignVillager(item.id));
       },
     }),
     [dispatch],
@@ -58,8 +59,8 @@ export const TownView = () => {
 
   return (
     <StyledContainer>
-      <Grid container>
-        <Grid item sx={{ position: "relative" }} xs={9}>
+      <Grid container spacing={1}>
+        <Grid item sx={{ position: "relative" }} xs={10}>
           <Image
             src={townTier1Image}
             style={{ width: "100%", marginBottom: theme.spacing(1) }}
@@ -136,7 +137,9 @@ export const TownView = () => {
             </Typography>
           </StyledBox>
         </Grid>
-        <Grid item xs={3}></Grid>
+        <Grid item xs={2}>
+          <TownResources />
+        </Grid>
       </Grid>
     </StyledContainer>
   );

@@ -2,7 +2,10 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 // LOCAL FILES
+// Constants
+import { NO_RESOURCES } from "features/resources/constants";
 // Interfaces & Types
+import type { Resources } from "features/resources/types";
 import type { TownBuilding, TownVillager } from "features/town/types";
 // Redux
 import {
@@ -14,11 +17,13 @@ import {
 
 interface TownState {
   buildingIdToBuilding: Record<number, TownBuilding>;
+  resources: Resources;
   villagerIdToVillager: Record<number, TownVillager>;
 }
 
 const initialState: TownState = {
   buildingIdToBuilding: {},
+  resources: NO_RESOURCES,
   villagerIdToVillager: {},
 };
 

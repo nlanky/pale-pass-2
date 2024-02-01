@@ -50,10 +50,10 @@ export const TownBuildingOverlay: FC<TownBuildingOverlayProps> = ({
         isOver: !!monitor.isOver(),
         canDrop: !!monitor.canDrop(),
       }),
-      drop: (item) => {
+      drop: (item: { id: number }) => {
         dispatch(
           assignVillager({
-            villagerId: (item as any).id,
+            villagerId: item.id,
             buildingId,
           }),
         );
@@ -80,8 +80,8 @@ export const TownBuildingOverlay: FC<TownBuildingOverlayProps> = ({
             position: "absolute",
             top: building.position.y * townImageHeight,
             left: building.position.x * townImageWidth,
-            width: 0.075 * townImageWidth,
-            height: 0.075 * townImageHeight,
+            width: 0.1 * townImageWidth,
+            height: 0.1 * townImageHeight,
             cursor: "pointer",
           },
         ]}
