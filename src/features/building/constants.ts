@@ -3,30 +3,22 @@
 import {
   building001ExteriorImage,
   building001InteriorImage,
+  building002ExteriorImage,
+  building002InteriorImage,
 } from "assets/building";
 // Interfaces & Types
 import type { Building } from "features/building/types";
-
-/*
-TODO
-hover over upgrade to see next building image?
-grey out tier 1 building until built
-build phase
-    fixed build time?
-    assign villagers to build faster?
-    resource cost?
-repair phase
-    fixed repair time?
-    assign villagers to repair faster?
-    resource cost?
-requirements
-*/
 
 export const BUILDING_ID_TO_BUILDING: Record<number, Building> = {
   1: {
     id: 1,
     name: "Housing",
-    descriptions: [{ tier: 1, text: "Housing tier 1" }],
+    descriptions: [
+      {
+        tier: 1,
+        text: "A few days of labour and you stand before small, but cosy and warm cottages. Much better than the tents and shelters people were using! People are sure to work harder with a good roof over their heads.",
+      },
+    ],
     images: [
       {
         tier: 1,
@@ -34,7 +26,28 @@ export const BUILDING_ID_TO_BUILDING: Record<number, Building> = {
         interior: building001InteriorImage,
       },
     ],
-    position: { x: 0.3, y: 0.59 },
+    position: { x: 0.37, y: 0.7 },
     maxTier: 1,
+    maxAssignedVillagers: 0,
+  },
+  2: {
+    id: 2,
+    name: "Sawmill",
+    descriptions: [
+      {
+        tier: 1,
+        text: "A veritable forest of industry surrounds you as you stand amid the roaring of sawblades, processing felled trees deftly and quickly. And importantly, not doing so inside the town any longer!",
+      },
+    ],
+    images: [
+      {
+        tier: 1,
+        exterior: building002ExteriorImage,
+        interior: building002InteriorImage,
+      },
+    ],
+    position: { x: 0.92, y: 0.77 },
+    maxTier: 1,
+    maxAssignedVillagers: 1,
   },
 };

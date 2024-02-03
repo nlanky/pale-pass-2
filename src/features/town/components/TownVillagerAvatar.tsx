@@ -11,10 +11,12 @@ import { VILLAGER_ID_TO_VILLAGER } from "features/villager/constants";
 
 interface TownVillagerAvatarProps {
   villagerId: number;
+  borderColor?: string;
 }
 
 export const TownVillagerAvatar: FC<TownVillagerAvatarProps> = ({
   villagerId,
+  borderColor = "white",
 }) => {
   // Hooks
   const [{ isDragging }, drag] = useDrag(
@@ -35,7 +37,12 @@ export const TownVillagerAvatar: FC<TownVillagerAvatarProps> = ({
     <Avatar
       ref={drag}
       src={villager.image}
-      sx={{ opacity: isDragging ? 0 : 1 }}
+      sx={{
+        borderWidth: 2,
+        borderStyle: "solid",
+        borderColor,
+        opacity: isDragging ? 0 : 1,
+      }}
     />
   );
 };

@@ -82,7 +82,12 @@ export const ResourceView = () => {
 
   return (
     <StyledContainer>
-      <StyledGrid direction="column" sx={{ p: 1 }}>
+      <StyledGrid
+        alignItems="start"
+        container
+        direction="column"
+        sx={{ p: 1 }}
+      >
         <Button onClick={onBack}>Back to Town</Button>
         <TableContainer sx={{ mt: 1 }}>
           <Table stickyHeader>

@@ -7,15 +7,12 @@ import { useDrop } from "react-dnd";
 import { useNavigate } from "react-router-dom";
 
 // LOCAL FILES
-// Assets
-import { townTier1Image } from "assets/town";
 // Components
 import { BuildingTooltip } from "features/building/components";
 import { TownVillagerAvatar } from "features/town/components";
 // Constants
 import { BUILDING_ID_TO_BUILDING } from "features/building/constants";
 // Hooks
-import { useImageDimensions } from "features/common/hooks";
 import { useAppDispatch, useAppSelector } from "features/redux/hooks";
 // Redux
 import { assignVillager } from "features/town/actions";
@@ -26,26 +23,34 @@ import {
 
 interface TownBuildingOverlayProps {
   buildingId: number;
+  townImageSize: { width: number; height: number };
 }
 
 export const TownBuildingOverlay: FC<TownBuildingOverlayProps> = ({
   buildingId,
+  townImageSize,
 }) => {
+  // Derived variables
+  const building = BUILDING_ID_TO_BUILDING[buildingId];
+  const { width: townImageWidth, height: townImageHeight } =
+    townImageSize;
+
   // Hooks
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { width: townImageWidth, height: townImageHeight } =
-    useImageDimensions(townTier1Image);
-  const assignedVillagerIds = useAppSelector((state) =>
-    selectVillagerIdsAssignedToBuilding(state, buildingId),
-  );
   const townBuilding = useAppSelector((state) =>
     selectTownBuilding(state, buildingId),
+  );
+  const assignedVillagerIds = useAppSelector((state) =>
+    selectVillagerIdsAssignedToBuilding(state, buildingId),
   );
   const [{}, drop] = useDrop(
     () => ({
       accept: "villager",
-      canDrop: () => townBuilding !== undefined,
+      canDrop: () =>
+        townBuilding !== undefined &&
+        assignedVillagerIds.length + 1 <=
+          building.maxAssignedVillagers,
       collect: (monitor) => ({
         isOver: !!monitor.isOver(),
         canDrop: !!monitor.canDrop(),
@@ -62,9 +67,6 @@ export const TownBuildingOverlay: FC<TownBuildingOverlayProps> = ({
     [dispatch],
   );
 
-  // Derived variables
-  const building = BUILDING_ID_TO_BUILDING[buildingId];
-
   return (
     <Tooltip
       followCursor
@@ -78,8 +80,12 @@ export const TownBuildingOverlay: FC<TownBuildingOverlayProps> = ({
         sx={[
           {
             position: "absolute",
-            top: building.position.y * townImageHeight,
-            left: building.position.x * townImageWidth,
+            top:
+              building.position.y * townImageHeight -
+              0.05 * townImageHeight,
+            left:
+              building.position.x * townImageWidth -
+              0.05 * townImageWidth,
             width: 0.1 * townImageWidth,
             height: 0.1 * townImageHeight,
             cursor: "pointer",

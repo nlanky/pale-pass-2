@@ -23,8 +23,10 @@ export interface Building {
   descriptions: BuildingDescription[];
   /** @type {BuildingImage[]} List of building images. One per tier. */
   images: BuildingImage[];
-  /** @type {BuildingPosition} Position of building on town map. x and y are percentages from top left of image. */
+  /** @type {BuildingPosition} Position of building on town map. x and y are percentages. (x, y) is centre of building on town map. */
   position: BuildingPosition;
   /** @type {number} The highest tier the building can reach */
   maxTier: number;
+  /** @type {number} The highest number of villagers that can be assigned to the building */
+  maxAssignedVillagers: number;
 }

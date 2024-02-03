@@ -1,30 +1,19 @@
 // PUBLIC MODULES
-import {
-  Avatar,
-  Button,
-  Grid,
-  Typography,
-  useTheme,
-} from "@mui/material";
+import { Avatar, Button, Grid, Typography } from "@mui/material";
 import { useDrop } from "react-dnd";
 import { useNavigate } from "react-router-dom";
 
 // LOCAL FILES
-// Assets
-import { townTier1Image } from "assets/town";
 // Components
 import {
-  Image,
   StyledBox,
   StyledContainer,
 } from "features/common/components";
 import {
-  TownBuildingOverlay,
+  TownImage,
   TownResources,
   TownVillagerAvatar,
 } from "features/town/components";
-// Constants
-import { BUILDING_ID_TO_BUILDING } from "features/building/constants";
 // Hooks
 import { useAppDispatch, useAppSelector } from "features/redux/hooks";
 // Interfaces & Types
@@ -43,7 +32,6 @@ export const TownView = () => {
   // Hooks
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const theme = useTheme();
   const unassignedTownVillagerIds = useAppSelector(
     selectUnassignedVillagerIds,
   );
@@ -72,22 +60,11 @@ export const TownView = () => {
   return (
     <StyledContainer>
       <Grid container spacing={1}>
-        <Grid item sx={{ position: "relative" }} xs={10}>
-          <Image
-            src={townTier1Image}
-            style={{ width: "100%", marginBottom: theme.spacing(1) }}
-          />
-
-          {/* BUILDINGS */}
-          {Object.keys(BUILDING_ID_TO_BUILDING).map((buildingId) => (
-            <TownBuildingOverlay
-              key={buildingId}
-              buildingId={Number(buildingId)}
-            />
-          ))}
+        <Grid item xs={10}>
+          <TownImage />
 
           {/* VILLAGERS TO RECRUIT */}
-          <StyledBox sx={{ width: 1, p: 1, mb: 1 }}>
+          <StyledBox sx={{ width: 1, p: 1, mt: 1 }}>
             <Typography sx={{ mb: 1 }} variant="body1">
               Available to Recruit
             </Typography>
@@ -113,7 +90,7 @@ export const TownView = () => {
           </StyledBox>
 
           {/* UNASSIGNED VILLAGERS */}
-          <StyledBox sx={{ width: 1, p: 1, mb: 1 }}>
+          <StyledBox sx={{ width: 1, p: 1, mt: 1 }}>
             <Typography sx={{ mb: 1 }} variant="body1">
               Unassigned Villagers
             </Typography>
@@ -127,7 +104,10 @@ export const TownView = () => {
             <Grid container spacing={1}>
               {unassignedTownVillagerIds.map((id) => (
                 <Grid key={id} item>
-                  <TownVillagerAvatar villagerId={id} />
+                  <TownVillagerAvatar
+                    villagerId={id}
+                    borderColor="containerBorder.main"
+                  />
                 </Grid>
               ))}
             </Grid>
@@ -142,6 +122,7 @@ export const TownView = () => {
             sx={{
               width: "100%",
               height: 50,
+              mt: 1,
             }}
           >
             <Typography variant="body1">
