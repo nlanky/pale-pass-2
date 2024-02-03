@@ -1,7 +1,6 @@
 // PUBLIC MODULES
-import { Avatar, Button, Grid, Typography } from "@mui/material";
+import { Avatar, Grid, Typography } from "@mui/material";
 import { useDrop } from "react-dnd";
-import { useNavigate } from "react-router-dom";
 
 // LOCAL FILES
 // Components
@@ -9,6 +8,8 @@ import {
   StyledBox,
   StyledContainer,
 } from "features/common/components";
+import { ResourceViewButton } from "features/resource/components";
+import { NextTurnButton } from "features/system/components";
 import {
   TownImage,
   TownResources,
@@ -31,7 +32,6 @@ import {
 export const TownView = () => {
   // Hooks
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
   const unassignedTownVillagerIds = useAppSelector(
     selectUnassignedVillagerIds,
   );
@@ -53,10 +53,6 @@ export const TownView = () => {
     dispatch(recruitVillager(villager));
   };
 
-  const onOverview = () => {
-    navigate("/resources");
-  };
-
   return (
     <StyledContainer>
       <Grid container spacing={1}>
@@ -75,18 +71,20 @@ export const TownView = () => {
               </Typography>
             )}
 
-            <Grid container spacing={1}>
-              {villagersAvailableToRecruit.map((villager) => (
-                <Grid key={villager.id} item>
-                  <Avatar
-                    onClick={() => {
-                      onRecruit(villager);
-                    }}
-                    src={villager.image}
-                  />
-                </Grid>
-              ))}
-            </Grid>
+            {villagersAvailableToRecruit.length !== 0 && (
+              <Grid container spacing={1}>
+                {villagersAvailableToRecruit.map((villager) => (
+                  <Grid key={villager.id} item>
+                    <Avatar
+                      onClick={() => {
+                        onRecruit(villager);
+                      }}
+                      src={villager.image}
+                    />
+                  </Grid>
+                ))}
+              </Grid>
+            )}
           </StyledBox>
 
           {/* UNASSIGNED VILLAGERS */}
@@ -101,16 +99,18 @@ export const TownView = () => {
               </Typography>
             )}
 
-            <Grid container spacing={1}>
-              {unassignedTownVillagerIds.map((id) => (
-                <Grid key={id} item>
-                  <TownVillagerAvatar
-                    villagerId={id}
-                    borderColor="containerBorder.main"
-                  />
-                </Grid>
-              ))}
-            </Grid>
+            {unassignedTownVillagerIds.length !== 0 && (
+              <Grid container spacing={1}>
+                {unassignedTownVillagerIds.map((id) => (
+                  <Grid key={id} item>
+                    <TownVillagerAvatar
+                      villagerId={id}
+                      borderColor="containerBorder.main"
+                    />
+                  </Grid>
+                ))}
+              </Grid>
+            )}
           </StyledBox>
 
           {/* UNASSIGN VILLAGERS */}
@@ -132,9 +132,12 @@ export const TownView = () => {
         </Grid>
         <Grid container direction="column" item xs={2}>
           <TownResources />
-          <Button onClick={onOverview} sx={{ mt: 1 }}>
-            Overview
-          </Button>
+          <Grid item sx={{ mt: 1 }}>
+            <ResourceViewButton />
+          </Grid>
+          <Grid item sx={{ mt: 1 }}>
+            <NextTurnButton />
+          </Grid>
         </Grid>
       </Grid>
     </StyledContainer>

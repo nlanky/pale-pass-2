@@ -14,6 +14,15 @@ export interface BuildingPosition {
   y: number;
 }
 
+export type BuildingEffect =
+  | "POPULATION"
+  | "COLLECT_WOOD"
+  | "COLLECT_STONE"
+  | "COLLECT_IRON"
+  | "COLLECT_STEEL"
+  | "COLLECT_MYTHRIL"
+  | "COLLECT_AMETHYST";
+
 export interface Building {
   /** @type {number} Unique identifier for building */
   id: number;
@@ -29,4 +38,6 @@ export interface Building {
   maxTier: number;
   /** @type {number} The highest number of villagers that can be assigned to the building */
   maxAssignedVillagers: number;
+  /** @type {BuildingEffect[]} List of effects obtained from the building being built */
+  effects: BuildingEffect[];
 }

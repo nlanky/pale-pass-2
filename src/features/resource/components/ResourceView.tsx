@@ -5,32 +5,40 @@ import type { FC } from "react";
 import {
   Avatar,
   Button,
+  Grid,
   Table,
   TableBody,
   TableContainer,
   TableCell,
   TableHead,
   TableRow,
+  Typography,
 } from "@mui/material";
+import { ArrowDownward, ArrowUpward } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 
 // LOCAL FILES
 // Components
 import {
+  Image,
   StyledContainer,
   StyledGrid,
 } from "features/common/components";
 // Constants
 import { BUILDING_ID_TO_BUILDING } from "features/building/constants";
+import { RESOURCE_TO_IMAGE } from "features/resource/constants";
+import { VILLAGER_ID_TO_VILLAGER } from "features/villager/constants";
 // Hooks
 import { useAppSelector } from "features/redux/hooks";
+// Interfaces & Types
+import type { Resource } from "features/resource/types";
 // Redux
 import {
   selectTownBuildingIds,
+  selectTownBuildingResourcesPerTurn,
   selectTownBuildingTier,
   selectVillagerIdsAssignedToBuilding,
 } from "features/town/selectors";
-import { VILLAGER_ID_TO_VILLAGER } from "features/villager/constants";
 
 interface ResourceViewRowProps {
   buildingId: number;
@@ -45,6 +53,9 @@ const ResourceViewRow: FC<ResourceViewRowProps> = ({
   );
   const assignedVillagerIds = useAppSelector((state) =>
     selectVillagerIdsAssignedToBuilding(state, buildingId),
+  );
+  const resourcesPerTurn = useAppSelector((state) =>
+    selectTownBuildingResourcesPerTurn(state, buildingId),
   );
 
   // Derived variables
@@ -63,7 +74,51 @@ const ResourceViewRow: FC<ResourceViewRowProps> = ({
           />
         ))}
       </TableCell>
-      <TableCell>-</TableCell>
+      <TableCell>
+        <Grid alignItems="center" container wrap="nowrap">
+          {(Object.keys(resourcesPerTurn) as Resource[]).map(
+            (resource, index) => {
+              const rpt = resourcesPerTurn[resource];
+              if (rpt === 0) {
+                return null;
+              }
+
+              let rptColour: string;
+              if (rpt > 0) {
+                rptColour = "success.main";
+              } else {
+                rptColour = "error.main";
+              }
+              return (
+                <Grid
+                  alignItems="center"
+                  container
+                  key={resource}
+                  item
+                  sx={[{ width: "auto" }, index !== 0 && { ml: 1 }]}
+                >
+                  <Image
+                    src={RESOURCE_TO_IMAGE[resource]}
+                    style={{ width: 32, height: 32 }}
+                  />
+                  {rpt > 0 && (
+                    <ArrowUpward color="success" fontSize="small" />
+                  )}
+                  {rpt < 0 && (
+                    <ArrowDownward color="error" fontSize="small" />
+                  )}
+                  <Typography
+                    sx={{ color: rptColour }}
+                    variant="body1"
+                  >
+                    {resourcesPerTurn[resource]}
+                  </Typography>
+                </Grid>
+              );
+            },
+          )}
+        </Grid>
+      </TableCell>
     </TableRow>
   );
 };

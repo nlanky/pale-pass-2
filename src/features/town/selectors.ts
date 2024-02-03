@@ -6,12 +6,15 @@ import { createSelector } from "@reduxjs/toolkit";
 import { VILLAGER_ID_TO_VILLAGER } from "features/villager/constants";
 // Interfaces & Types
 import type { RootState } from "features/redux/store";
+import type { Resources } from "features/resource/types";
 // Utility functions
 import { BUILDING_ID_TO_BUILDING } from "features/building/constants";
 import {
   getBuildingDescription,
   getBuildingImage,
 } from "features/building/utils";
+import { mergeResources } from "features/resource/utils";
+import { getTownBuildingResourcesPerTurn } from "features/town/utils";
 
 // BUILDINGS
 export const selectTownBuildingIdToBuilding = (state: RootState) =>
@@ -93,4 +96,32 @@ export const selectVillagerIdsAssignedToBuilding = createSelector(
         (villager) => villager.assignedBuildingId === buildingId,
       )
       .map((villager) => villager.id),
+);
+
+// COMBINED
+export const selectTownResourcesPerTurn = createSelector(
+  [selectTownBuildings, selectTownVillagers],
+  (townBuildings, townVillagers) => {
+    let resources: Resources = {
+      Wood: 0,
+      Stone: 0,
+      Iron: 0,
+      Steel: 0,
+      Mythril: 0,
+      Amethyst: 0,
+    };
+    townBuildings.forEach((townBuilding) => {
+      resources = mergeResources(
+        resources,
+        getTownBuildingResourcesPerTurn(townBuilding, townVillagers),
+      );
+    });
+    return resources;
+  },
+);
+
+export const selectTownBuildingResourcesPerTurn = createSelector(
+  [selectTownBuilding, selectTownVillagers],
+  (townBuilding, townVillagers) =>
+    getTownBuildingResourcesPerTurn(townBuilding, townVillagers),
 );

@@ -30,6 +30,9 @@ export const theme = createTheme({
           borderColor: theme.palette.containerBorder.main,
           color: theme.palette.text.primary,
           textTransform: "none",
+          "&:hover": {
+            backgroundColor: "white",
+          },
         }),
       },
     },
