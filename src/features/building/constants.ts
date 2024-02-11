@@ -27,8 +27,8 @@ export const BUILDING_ID_TO_BUILDING: Record<number, Building> = {
       },
     ],
     position: { x: 0.37, y: 0.7 },
-    maxTier: 1,
-    maxAssignedVillagers: 0,
+    maxTier: 5,
+    maxAssignedVillagers: 5,
     effects: ["POPULATION"],
   },
   2: {
@@ -48,8 +48,8 @@ export const BUILDING_ID_TO_BUILDING: Record<number, Building> = {
       },
     ],
     position: { x: 0.92, y: 0.77 },
-    maxTier: 1,
-    maxAssignedVillagers: 1,
+    maxTier: 5,
+    maxAssignedVillagers: 5,
     effects: ["COLLECT_WOOD"],
   },
 };

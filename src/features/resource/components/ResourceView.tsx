@@ -67,12 +67,16 @@ const ResourceViewRow: FC<ResourceViewRowProps> = ({
       <TableCell>{tier || "-"}</TableCell>
       <TableCell>
         {assignedVillagerIds.length === 0 && "-"}
-        {assignedVillagerIds.map((villagerId) => (
-          <Avatar
-            key={villagerId}
-            src={VILLAGER_ID_TO_VILLAGER[villagerId].image}
-          />
-        ))}
+        {assignedVillagerIds.length !== 0 && (
+          <Grid container>
+            {assignedVillagerIds.map((villagerId) => (
+              <Avatar
+                key={villagerId}
+                src={VILLAGER_ID_TO_VILLAGER[villagerId].image}
+              />
+            ))}
+          </Grid>
+        )}
       </TableCell>
       <TableCell>
         <Grid alignItems="center" container wrap="nowrap">

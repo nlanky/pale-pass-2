@@ -1,5 +1,5 @@
 // REACT
-import type { FC } from "react";
+import { type FC, useContext, useState, useEffect } from "react";
 
 // PUBLIC MODULES
 import { Box, Grid, Tooltip } from "@mui/material";
@@ -12,12 +12,18 @@ import { BuildingTooltip } from "features/building/components";
 import { TownVillagerAvatar } from "features/town/components";
 // Constants
 import { BUILDING_ID_TO_BUILDING } from "features/building/constants";
+import {
+  BUILDING_OVERLAY_HEIGHT,
+  BUILDING_OVERLAY_WIDTH,
+} from "features/town/constants";
+// Context
+import { DraggingVillagerContext } from "features/town/context";
 // Hooks
 import { useAppDispatch, useAppSelector } from "features/redux/hooks";
 // Redux
 import { assignVillager } from "features/town/actions";
 import {
-  selectTownBuilding,
+  selectCanAssignVillagerToBuilding,
   selectVillagerIdsAssignedToBuilding,
 } from "features/town/selectors";
 
@@ -30,31 +36,41 @@ export const TownBuildingOverlay: FC<TownBuildingOverlayProps> = ({
   buildingId,
   townImageSize,
 }) => {
+  // Hooks
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const assignedVillagerIds = useAppSelector((state) =>
+    selectVillagerIdsAssignedToBuilding(state, buildingId),
+  );
+  const canAssignVillager = useAppSelector((state) =>
+    selectCanAssignVillagerToBuilding(state, buildingId),
+  );
+
+  // Local state
+  const [tooltipShowing, setTooltipShowing] = useState(false);
+
+  // Context
+  const { isDragging } = useContext(DraggingVillagerContext);
+
   // Derived variables
   const building = BUILDING_ID_TO_BUILDING[buildingId];
   const { width: townImageWidth, height: townImageHeight } =
     townImageSize;
+  const showHighlight = isDragging && canAssignVillager;
+  const top =
+    building.position.y * townImageHeight -
+    (BUILDING_OVERLAY_HEIGHT / 2) * townImageHeight;
+  const left =
+    building.position.x * townImageWidth -
+    (BUILDING_OVERLAY_WIDTH / 2) * townImageWidth;
+  const width = BUILDING_OVERLAY_WIDTH * townImageWidth;
+  const height = BUILDING_OVERLAY_HEIGHT * townImageHeight;
 
   // Hooks
-  const dispatch = useAppDispatch();
-  const navigate = useNavigate();
-  const townBuilding = useAppSelector((state) =>
-    selectTownBuilding(state, buildingId),
-  );
-  const assignedVillagerIds = useAppSelector((state) =>
-    selectVillagerIdsAssignedToBuilding(state, buildingId),
-  );
-  const [{}, drop] = useDrop(
+  const [_, drop] = useDrop(
     () => ({
       accept: "villager",
-      canDrop: () =>
-        townBuilding !== undefined &&
-        assignedVillagerIds.length + 1 <=
-          building.maxAssignedVillagers,
-      collect: (monitor) => ({
-        isOver: !!monitor.isOver(),
-        canDrop: !!monitor.canDrop(),
-      }),
+      canDrop: () => canAssignVillager,
       drop: (item: { id: number }) => {
         dispatch(
           assignVillager({
@@ -64,12 +80,26 @@ export const TownBuildingOverlay: FC<TownBuildingOverlayProps> = ({
         );
       },
     }),
-    [dispatch],
+    [canAssignVillager, dispatch],
   );
+
+  // Effects
+  useEffect(() => {
+    if (isDragging) {
+      setTooltipShowing(false);
+    }
+  }, [isDragging]);
 
   return (
     <Tooltip
       followCursor
+      onClose={() => {
+        setTooltipShowing(false);
+      }}
+      onOpen={() => {
+        setTooltipShowing(true);
+      }}
+      open={tooltipShowing}
       title={<BuildingTooltip building={building} />}
     >
       <Box
@@ -80,15 +110,20 @@ export const TownBuildingOverlay: FC<TownBuildingOverlayProps> = ({
         sx={[
           {
             position: "absolute",
-            top:
-              building.position.y * townImageHeight -
-              0.05 * townImageHeight,
-            left:
-              building.position.x * townImageWidth -
-              0.05 * townImageWidth,
-            width: 0.1 * townImageWidth,
-            height: 0.1 * townImageHeight,
+            top,
+            left,
+            width,
+            height,
             cursor: "pointer",
+          },
+          showHighlight && {
+            top: top - 1,
+            left: left - 1,
+            width: width + 2,
+            height: height + 2,
+            borderWidth: 1,
+            borderStyle: "solid",
+            borderColor: "white",
           },
         ]}
       >
@@ -98,11 +133,13 @@ export const TownBuildingOverlay: FC<TownBuildingOverlayProps> = ({
           sx={{
             position: "absolute",
           }}
-          wrap="nowrap"
         >
           {assignedVillagerIds.map((villagerId) => (
             <Grid key={villagerId} item>
-              <TownVillagerAvatar villagerId={villagerId} />
+              <TownVillagerAvatar
+                villagerId={villagerId}
+                size={width / 3}
+              />
             </Grid>
           ))}
         </Grid>

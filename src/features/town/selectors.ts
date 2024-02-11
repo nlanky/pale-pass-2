@@ -3,12 +3,12 @@ import { createSelector } from "@reduxjs/toolkit";
 
 // LOCAL FILES
 // Constants
+import { BUILDING_ID_TO_BUILDING } from "features/building/constants";
 import { VILLAGER_ID_TO_VILLAGER } from "features/villager/constants";
 // Interfaces & Types
 import type { RootState } from "features/redux/store";
 import type { Resources } from "features/resource/types";
 // Utility functions
-import { BUILDING_ID_TO_BUILDING } from "features/building/constants";
 import {
   getBuildingDescription,
   getBuildingImage,
@@ -124,4 +124,18 @@ export const selectTownBuildingResourcesPerTurn = createSelector(
   [selectTownBuilding, selectTownVillagers],
   (townBuilding, townVillagers) =>
     getTownBuildingResourcesPerTurn(townBuilding, townVillagers),
+);
+
+export const selectCanAssignVillagerToBuilding = createSelector(
+  [selectTownBuilding, selectVillagerIdsAssignedToBuilding],
+  (townBuilding, assignedVillagerIds) => {
+    if (!townBuilding) {
+      return false;
+    }
+
+    const building = BUILDING_ID_TO_BUILDING[townBuilding.id];
+    return (
+      assignedVillagerIds.length + 1 <= building.maxAssignedVillagers
+    );
+  },
 );

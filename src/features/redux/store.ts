@@ -4,14 +4,14 @@ import {
   FLUSH,
   PAUSE,
   PERSIST,
-  // persistReducer,
+  persistReducer,
   persistStore,
   type PersistorOptions,
   PURGE,
   REGISTER,
   REHYDRATE,
 } from "redux-persist";
-// import storage from "redux-persist/lib/storage";
+import storage from "redux-persist/lib/storage";
 
 // LOCAL FILES
 // Redux
@@ -23,14 +23,14 @@ const rootReducer = combineReducers({
   town: townReducer,
 });
 
-// const persistConfig = {
-//   key: "root",
-//   storage,
-// };
-// const persistedReducer = persistReducer(persistConfig, rootReducer);
+const persistConfig = {
+  key: "root",
+  storage,
+};
+const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 export const store = configureStore({
-  reducer: rootReducer,
+  reducer: persistedReducer,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {
