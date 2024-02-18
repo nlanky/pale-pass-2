@@ -15,12 +15,20 @@ import storage from "redux-persist/lib/storage";
 
 // LOCAL FILES
 // Redux
+import { buildingReducer } from "features/building/buildingSlice";
+import { resourceReducer } from "features/resource/resourceSlice";
 import { systemReducer } from "features/system/systemSlice";
 import { townReducer } from "features/town/townSlice";
+import { villagerBuildingReducer } from "features/villager/villagerBuildingSlice";
+import { villagerReducer } from "features/villager/villagerSlice";
 
 const rootReducer = combineReducers({
+  building: buildingReducer,
+  resource: resourceReducer,
   system: systemReducer,
   town: townReducer,
+  villager: villagerReducer,
+  villagerBuilding: villagerBuildingReducer,
 });
 
 const persistConfig = {

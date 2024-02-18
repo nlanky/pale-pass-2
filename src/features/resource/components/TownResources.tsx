@@ -12,16 +12,16 @@ import type { Resource } from "features/resource/types";
 // Redux
 import { useAppSelector } from "features/redux/hooks";
 import {
-  selectTownResources,
-  selectTownResourcesPerTurn,
-} from "features/town/selectors";
+  selectResourcesPerTurn,
+  selectResourcesTotal,
+} from "features/resource/selectors";
 
 export const TownResources = () => {
   const resources = useAppSelector((state) =>
-    selectTownResources(state),
+    selectResourcesTotal(state),
   );
   const resourcesPerTurn = useAppSelector((state) =>
-    selectTownResourcesPerTurn(state),
+    selectResourcesPerTurn(state),
   );
 
   return (

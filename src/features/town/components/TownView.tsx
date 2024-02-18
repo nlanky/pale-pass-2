@@ -1,3 +1,6 @@
+// REACT
+import { useState } from "react";
+
 // PUBLIC MODULES
 import { Avatar, Grid, Typography } from "@mui/material";
 import { useDrop } from "react-dnd";
@@ -8,33 +11,33 @@ import {
   StyledBox,
   StyledContainer,
 } from "features/common/components";
-import { ResourceViewButton } from "features/resource/components";
+import {
+  ResourceViewButton,
+  TownResources,
+} from "features/resource/components";
 import { NextTurnButton } from "features/system/components";
 import {
   TownImage,
-  TownResources,
   TownVillagerAvatar,
 } from "features/town/components";
+// Context
+import { DraggingVillagerContext } from "features/town/context";
 // Hooks
 import { useAppDispatch, useAppSelector } from "features/redux/hooks";
 // Interfaces & Types
 import type { Villager } from "features/villager/types";
 // Redux
 import {
-  recruitVillager,
-  unassignVillager,
-} from "features/town/actions";
-import {
   selectUnassignedVillagerIds,
   selectVillagersAvailableToRecruit,
-} from "features/town/selectors";
-import { useState } from "react";
-import { DraggingVillagerContext } from "../context";
+} from "features/villager/selectors";
+import { unassignVillager } from "features/villager/villagerBuildingSlice";
+import { addVillager } from "features/villager/villagerSlice";
 
 export const TownView = () => {
   // Hooks
   const dispatch = useAppDispatch();
-  const unassignedTownVillagerIds = useAppSelector(
+  const unassignedVillagerIds = useAppSelector(
     selectUnassignedVillagerIds,
   );
   const villagersAvailableToRecruit = useAppSelector(
@@ -55,7 +58,7 @@ export const TownView = () => {
 
   // Handlers
   const onRecruit = (villager: Villager) => {
-    dispatch(recruitVillager(villager));
+    dispatch(addVillager({ id: villager.id }));
   };
 
   return (
@@ -104,15 +107,15 @@ export const TownView = () => {
                 Unassigned Villagers
               </Typography>
 
-              {unassignedTownVillagerIds.length === 0 && (
+              {unassignedVillagerIds.length === 0 && (
                 <Typography variant="body1">
                   No villagers to assign
                 </Typography>
               )}
 
-              {unassignedTownVillagerIds.length !== 0 && (
+              {unassignedVillagerIds.length !== 0 && (
                 <Grid container spacing={1}>
-                  {unassignedTownVillagerIds.map((id) => (
+                  {unassignedVillagerIds.map((id) => (
                     <Grid key={id} item>
                       <TownVillagerAvatar
                         villagerId={id}

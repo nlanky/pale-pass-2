@@ -10,12 +10,12 @@ import { BUILDING_ID_TO_BUILDING } from "features/building/constants";
 // Hooks
 import { useAppDispatch, useAppSelector } from "features/redux/hooks";
 // Redux
-import { buildBuilding } from "features/town/actions";
+import { addBuilding } from "features/building/buildingSlice";
 import {
-  selectTownBuildingDescription,
-  selectTownBuildingImage,
-  selectTownBuildingTier,
-} from "features/town/selectors";
+  selectBuildingDescription,
+  selectBuildingImage,
+  selectBuildingTier,
+} from "features/building/selectors";
 
 export const BuildingView = () => {
   // Hooks
@@ -35,13 +35,13 @@ export const BuildingView = () => {
   // Hooks
   const dispatch = useAppDispatch();
   const currentTier = useAppSelector((state) =>
-    selectTownBuildingTier(state, buildingId),
+    selectBuildingTier(state, buildingId),
   );
   const image = useAppSelector((state) =>
-    selectTownBuildingImage(state, buildingId),
+    selectBuildingImage(state, buildingId),
   );
   const description = useAppSelector((state) =>
-    selectTownBuildingDescription(state, buildingId),
+    selectBuildingDescription(state, buildingId),
   );
 
   // Handlers
@@ -50,7 +50,7 @@ export const BuildingView = () => {
   };
 
   const onBuild = () => {
-    dispatch(buildBuilding(building));
+    dispatch(addBuilding({ id: buildingId, tier: 1 }));
   };
 
   // Derived variables

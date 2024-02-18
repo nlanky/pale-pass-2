@@ -41,3 +41,8 @@ export interface Building {
   /** @type {BuildingEffect[]} List of effects obtained from the building being built */
   effects: BuildingEffect[];
 }
+
+export interface TownBuilding {
+  id: number;
+  tier: number;
+}

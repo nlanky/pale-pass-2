@@ -10,7 +10,7 @@ import type { Building } from "features/building/types";
 // Hooks
 import { useAppSelector } from "features/redux/hooks";
 // Redux
-import { selectTownBuilding } from "features/town/selectors";
+import { selectBuildingById } from "features/building/selectors";
 
 interface BuildingTooltipProps {
   building: Building;
@@ -23,7 +23,7 @@ export const BuildingTooltip: FC<BuildingTooltipProps> = ({
 
   // Hooks
   const townBuilding = useAppSelector((state) =>
-    selectTownBuilding(state, id),
+    selectBuildingById(state, id),
   );
 
   // Derived variables

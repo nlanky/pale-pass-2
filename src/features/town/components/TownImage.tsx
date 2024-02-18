@@ -8,8 +8,8 @@ import { Box } from "@mui/material";
 // Assets
 import { townTier1Image } from "assets/town";
 // Components
+import { BuildingOverlay } from "features/building/components";
 import { Image } from "features/common/components";
-import { TownBuildingOverlay } from "features/town/components";
 // Constants
 import { BUILDING_ID_TO_BUILDING } from "features/building/constants";
 
@@ -35,7 +35,7 @@ export const TownImage: FC<{}> = () => {
 
       {/* BUILDINGS */}
       {Object.keys(BUILDING_ID_TO_BUILDING).map((buildingId) => (
-        <TownBuildingOverlay
+        <BuildingOverlay
           key={buildingId}
           buildingId={Number(buildingId)}
           townImageSize={imageSize}

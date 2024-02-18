@@ -8,3 +8,12 @@ export interface Villager {
   /** @type {string} Path to image of villager */
   image: string;
 }
+
+export interface TownVillager {
+  id: number;
+}
+
+export interface VillagerBuildingAssignment {
+  villagerId: number;
+  buildingId: number;
+}

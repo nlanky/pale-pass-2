@@ -34,11 +34,11 @@ import { useAppSelector } from "features/redux/hooks";
 import type { Resource } from "features/resource/types";
 // Redux
 import {
-  selectTownBuildingIds,
-  selectTownBuildingResourcesPerTurn,
-  selectTownBuildingTier,
+  selectBuildingIds,
+  selectBuildingTier,
   selectVillagerIdsAssignedToBuilding,
-} from "features/town/selectors";
+} from "features/building/selectors";
+import { selectBuildingResourcesPerTurn } from "features/resource/selectors";
 
 interface ResourceViewRowProps {
   buildingId: number;
@@ -49,13 +49,13 @@ const ResourceViewRow: FC<ResourceViewRowProps> = ({
 }) => {
   // Hooks
   const tier = useAppSelector((state) =>
-    selectTownBuildingTier(state, buildingId),
+    selectBuildingTier(state, buildingId),
   );
   const assignedVillagerIds = useAppSelector((state) =>
     selectVillagerIdsAssignedToBuilding(state, buildingId),
   );
   const resourcesPerTurn = useAppSelector((state) =>
-    selectTownBuildingResourcesPerTurn(state, buildingId),
+    selectBuildingResourcesPerTurn(state, buildingId),
   );
 
   // Derived variables
@@ -130,8 +130,8 @@ const ResourceViewRow: FC<ResourceViewRowProps> = ({
 export const ResourceView = () => {
   // Hooks
   const navigate = useNavigate();
-  const townBuildingIds = useAppSelector((state) =>
-    selectTownBuildingIds(state),
+  const buildingIds = useAppSelector((state) =>
+    selectBuildingIds(state),
   );
 
   // Handlers
@@ -159,7 +159,7 @@ export const ResourceView = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {townBuildingIds.map((buildingId) => (
+              {buildingIds.map((buildingId) => (
                 <ResourceViewRow
                   key={buildingId}
                   buildingId={buildingId}

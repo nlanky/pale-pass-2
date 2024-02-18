@@ -21,18 +21,18 @@ import { DraggingVillagerContext } from "features/town/context";
 // Hooks
 import { useAppDispatch, useAppSelector } from "features/redux/hooks";
 // Redux
-import { assignVillager } from "features/town/actions";
 import {
   selectCanAssignVillagerToBuilding,
   selectVillagerIdsAssignedToBuilding,
-} from "features/town/selectors";
+} from "features/building/selectors";
+import { assignVillager } from "features/villager/villagerBuildingSlice";
 
-interface TownBuildingOverlayProps {
+interface BuildingOverlayProps {
   buildingId: number;
   townImageSize: { width: number; height: number };
 }
 
-export const TownBuildingOverlay: FC<TownBuildingOverlayProps> = ({
+export const BuildingOverlay: FC<BuildingOverlayProps> = ({
   buildingId,
   townImageSize,
 }) => {
