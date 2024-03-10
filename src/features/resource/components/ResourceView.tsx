@@ -161,8 +161,8 @@ export const ResourceView = () => {
             <TableBody>
               {buildingIds.map((buildingId) => (
                 <ResourceViewRow
-                  key={buildingId}
                   buildingId={buildingId}
+                  key={buildingId}
                 />
               ))}
             </TableBody>

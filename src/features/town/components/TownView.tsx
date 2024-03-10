@@ -25,7 +25,7 @@ import { DraggingVillagerContext } from "features/town/context";
 // Hooks
 import { useAppDispatch, useAppSelector } from "features/redux/hooks";
 // Interfaces & Types
-import type { Villager } from "features/villager/types";
+import type { Villager } from "features/villager/classes";
 // Redux
 import {
   selectUnassignedVillagerIds,
@@ -58,7 +58,12 @@ export const TownView = () => {
 
   // Handlers
   const onRecruit = (villager: Villager) => {
-    dispatch(addVillager({ id: villager.id }));
+    dispatch(
+      addVillager({
+        id: villager.id,
+        stats: villager.startingStats,
+      }),
+    );
   };
 
   return (
@@ -88,7 +93,7 @@ export const TownView = () => {
               {villagersAvailableToRecruit.length !== 0 && (
                 <Grid container spacing={1}>
                   {villagersAvailableToRecruit.map((villager) => (
-                    <Grid key={villager.id} item>
+                    <Grid item key={villager.id}>
                       <Avatar
                         onClick={() => {
                           onRecruit(villager);
@@ -116,7 +121,7 @@ export const TownView = () => {
               {unassignedVillagerIds.length !== 0 && (
                 <Grid container spacing={1}>
                   {unassignedVillagerIds.map((id) => (
-                    <Grid key={id} item>
+                    <Grid item key={id}>
                       <TownVillagerAvatar
                         villagerId={id}
                         borderColor="containerBorder.main"

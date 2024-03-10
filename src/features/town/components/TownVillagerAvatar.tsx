@@ -1,5 +1,5 @@
 // REACT
-import { type FC, useContext, useEffect } from "react";
+import { type FC, useContext, useEffect, useState } from "react";
 
 // PUBLIC MODULES
 import { Avatar } from "@mui/material";
@@ -10,6 +10,7 @@ import { useDrag } from "react-dnd";
 import { DraggingVillagerContext } from "features/town/context";
 // Interfaces & Types
 import { VILLAGER_ID_TO_VILLAGER } from "features/villager/constants";
+import { VillagerDialog } from "features/villager/components";
 
 interface TownVillagerAvatarProps {
   villagerId: number;
@@ -40,6 +41,9 @@ export const TownVillagerAvatar: FC<TownVillagerAvatarProps> = ({
   // Context
   const { setDragging } = useContext(DraggingVillagerContext);
 
+  // Local state
+  const [dialogOpen, setDialogOpen] = useState(false);
+
   // Effects
   useEffect(() => {
     setDragging(isDragging);
@@ -48,19 +52,36 @@ export const TownVillagerAvatar: FC<TownVillagerAvatarProps> = ({
   // Derived variables
   const villager = VILLAGER_ID_TO_VILLAGER[villagerId];
 
+  // Handlers
+  const onDoubleClick = () => {
+    setDialogOpen(true);
+  };
+
+  const onDialogClose = () => {
+    setDialogOpen(false);
+  };
+
   return (
-    <Avatar
-      ref={drag}
-      src={villager.image}
-      sx={{
-        width: size,
-        height: size,
-        borderWidth: 2,
-        borderStyle: "solid",
-        borderColor,
-        opacity: isDragging ? 0 : 1,
-        cursor: "pointer",
-      }}
-    />
+    <>
+      <Avatar
+        onDoubleClick={onDoubleClick}
+        ref={drag}
+        src={villager.image}
+        sx={{
+          width: size,
+          height: size,
+          borderWidth: 2,
+          borderStyle: "solid",
+          borderColor,
+          opacity: isDragging ? 0 : 1,
+          cursor: "pointer",
+        }}
+      />
+      <VillagerDialog
+        villager={villager}
+        open={dialogOpen}
+        onClose={onDialogClose}
+      />
+    </>
   );
 };

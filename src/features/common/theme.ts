@@ -41,6 +41,11 @@ export const theme = createTheme({
         maxWidth: "lg",
       },
     },
+    MuiTooltip: {
+      defaultProps: {
+        followCursor: true,
+      },
+    },
   },
   palette: {
     containerBackground: createColour("#e6e4d1"),

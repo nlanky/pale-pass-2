@@ -92,7 +92,6 @@ export const BuildingOverlay: FC<BuildingOverlayProps> = ({
 
   return (
     <Tooltip
-      followCursor
       onClose={() => {
         setTooltipShowing(false);
       }}
