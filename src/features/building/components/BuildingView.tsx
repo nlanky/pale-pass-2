@@ -10,7 +10,10 @@ import { BUILDING_ID_TO_BUILDING } from "features/building/constants";
 // Hooks
 import { useAppDispatch, useAppSelector } from "features/redux/hooks";
 // Redux
-import { addBuilding } from "features/building/buildingSlice";
+import {
+  addBuilding,
+  updateBuilding,
+} from "features/building/buildingSlice";
 import {
   selectBuildingDescription,
   selectBuildingImage,
@@ -53,8 +56,18 @@ export const BuildingView = () => {
     dispatch(addBuilding({ id: buildingId, tier: 1 }));
   };
 
+  const onUpgrade = () => {
+    dispatch(
+      updateBuilding({
+        id: buildingId,
+        changes: { tier: currentTier + 1 },
+      }),
+    );
+  };
+
   // Derived variables
   const canBuild = currentTier === undefined;
+  const canUpgrade = currentTier && currentTier < building.maxTier;
 
   return (
     <Container maxWidth="lg">
@@ -87,6 +100,12 @@ export const BuildingView = () => {
         {canBuild && (
           <Button onClick={onBuild} sx={{ mt: 1 }}>
             Build
+          </Button>
+        )}
+
+        {canUpgrade && (
+          <Button onClick={onUpgrade} sx={{ mt: 1 }}>
+            Upgrade
           </Button>
         )}
       </StyledGrid>

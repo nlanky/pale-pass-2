@@ -7,11 +7,19 @@ import {
   building002InteriorImage,
 } from "assets/building";
 // Interfaces & Types
-import type { Building } from "features/building/types";
+import type { Building, TownBuilding } from "features/building/types";
+
+export const HOUSING_BUILDING_ID = 1;
+
+export const INITIAL_BUILDINGS: TownBuilding[] = [
+  { id: HOUSING_BUILDING_ID, tier: 1 },
+];
+
+export const POPULATION_PER_HOUSING_TIER = 10;
 
 export const BUILDING_ID_TO_BUILDING: Record<number, Building> = {
-  1: {
-    id: 1,
+  [HOUSING_BUILDING_ID]: {
+    id: HOUSING_BUILDING_ID,
     name: "Housing",
     descriptions: [
       {

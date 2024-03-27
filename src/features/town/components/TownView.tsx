@@ -18,6 +18,7 @@ import {
 import { NextTurnButton } from "features/system/components";
 import {
   TownImage,
+  TownPopulation,
   TownVillagerAvatar,
 } from "features/town/components";
 // Context
@@ -149,11 +150,18 @@ export const TownView = () => {
               </Typography>
             </StyledBox>
           </Grid>
+
           <Grid container direction="column" item xs={2}>
             <TownResources />
+
+            <Grid item sx={{ mt: 1 }}>
+              <TownPopulation />
+            </Grid>
+
             <Grid item sx={{ mt: 1 }}>
               <ResourceViewButton />
             </Grid>
+
             <Grid item sx={{ mt: 1 }}>
               <NextTurnButton />
             </Grid>
