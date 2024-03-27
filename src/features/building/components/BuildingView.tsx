@@ -87,9 +87,7 @@ export const BuildingView = () => {
 
         <Grid container>
           <Grid item xs={9}>
-            <Typography variant="body1">
-              {description?.text}
-            </Typography>
+            <Typography variant="body1">{description}</Typography>
           </Grid>
 
           <Grid item xs={3}>

@@ -9,11 +9,8 @@ import type { RootState } from "features/redux/store";
 // Redux
 import { buildingAdapter } from "features/building/buildingSlice";
 import { selectVillagerAssignments } from "features/villager/selectors";
-// Utility functions
-import {
-  getBuildingImage,
-  getBuildingDescription,
-} from "features/building/utils";
+
+const selectBuildingId = (_: RootState, id: number) => id;
 
 export const {
   selectAll: selectBuildings,
@@ -29,19 +26,19 @@ export const selectBuildingTier = createSelector(
 );
 
 export const selectBuildingImage = createSelector(
-  [(_, buildingId: number) => buildingId, selectBuildingTier],
+  [selectBuildingId, selectBuildingTier],
   (buildingId, tier) =>
-    getBuildingImage(BUILDING_ID_TO_BUILDING[buildingId], tier),
+    BUILDING_ID_TO_BUILDING[buildingId].getImage(tier),
 );
 
 export const selectBuildingDescription = createSelector(
-  [(_, buildingId: number) => buildingId, selectBuildingTier],
+  [selectBuildingId, selectBuildingTier],
   (buildingId, tier) =>
-    getBuildingDescription(BUILDING_ID_TO_BUILDING[buildingId], tier),
+    BUILDING_ID_TO_BUILDING[buildingId].getDescription(tier),
 );
 
 export const selectVillagerIdsAssignedToBuilding = createSelector(
-  [selectVillagerAssignments, (_, buildingId: number) => buildingId],
+  [selectVillagerAssignments, selectBuildingId],
   (assignments, buildingId) =>
     assignments
       .filter((assignment) => assignment.buildingId === buildingId)
@@ -56,8 +53,8 @@ export const selectCanAssignVillagerToBuilding = createSelector(
     }
 
     return (
-      assignedVillagerIds.length + 1 <=
-      BUILDING_ID_TO_BUILDING[building.id].maxAssignedVillagers
+      assignedVillagerIds.length + 1 <= building.tier &&
+      BUILDING_ID_TO_BUILDING[building.id].canAssignVillagers
     );
   },
 );

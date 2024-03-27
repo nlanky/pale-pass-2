@@ -4,8 +4,8 @@ import { createSelector } from "@reduxjs/toolkit";
 // LOCAL FILES
 // Constants
 import {
-  HOUSING_BUILDING_ID,
-  POPULATION_PER_HOUSING_TIER,
+  BUILDING_ID_TO_BUILDING,
+  POPULATION_PER_BUILDING_TIER,
 } from "features/building/constants";
 // Redux
 import { selectBuildings } from "features/building/selectors";
@@ -19,9 +19,15 @@ export const selectCurrentPopulation = createSelector(
 export const selectMaxPopulation = createSelector(
   [selectBuildings],
   (buildings) => {
-    const housing = buildings.find(
-      (building) => building.id === HOUSING_BUILDING_ID,
+    const populationBuildings = buildings.filter((building) =>
+      BUILDING_ID_TO_BUILDING[building.id].effects.includes(
+        "POPULATION",
+      ),
     );
-    return (housing?.tier || 0) * POPULATION_PER_HOUSING_TIER;
+    let maxPopulation = 0;
+    populationBuildings.forEach((building) => {
+      maxPopulation += building.tier * POPULATION_PER_BUILDING_TIER;
+    });
+    return maxPopulation;
   },
 );

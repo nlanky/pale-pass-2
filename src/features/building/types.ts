@@ -15,30 +15,30 @@ export interface BuildingPosition {
 }
 
 export type BuildingEffect =
-  | "POPULATION"
   | "COLLECT_WOOD"
   | "COLLECT_STONE"
   | "COLLECT_IRON"
   | "COLLECT_STEEL"
   | "COLLECT_MYTHRIL"
-  | "COLLECT_AMETHYST";
+  | "COLLECT_AMETHYST"
+  | "ENEMY_INFO"
+  | "MAP_TILE"
+  | "POPULATION"
+  | "RESOURCE_STORAGE"
+  | "TRAIN_COMBAT"
+  | "TRAIN_GATHERING"
+  | "TRAIN_HEALING"
+  | "TRAIN_SCOUTING"
+  | "TRAIN_SPYCRAFT";
 
-export interface Building {
-  /** @type {number} Unique identifier for building */
+export interface BuildingNew {
   id: number;
-  /** @type {string} Name of building */
   name: string;
-  /** @type {BuildingDescription[]} List of building descriptions. One per tier. */
   descriptions: BuildingDescription[];
-  /** @type {BuildingImage[]} List of building images. One per tier. */
   images: BuildingImage[];
-  /** @type {BuildingPosition} Position of building on town map. x and y are percentages. (x, y) is centre of building on town map. */
   position: BuildingPosition;
-  /** @type {number} The highest tier the building can reach */
   maxTier: number;
-  /** @type {number} The highest number of villagers that can be assigned to the building */
-  maxAssignedVillagers: number;
-  /** @type {BuildingEffect[]} List of effects obtained from the building being built */
+  canAssignVillagers: boolean;
   effects: BuildingEffect[];
 }
 

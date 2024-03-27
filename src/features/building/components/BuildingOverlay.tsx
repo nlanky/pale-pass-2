@@ -57,12 +57,8 @@ export const BuildingOverlay: FC<BuildingOverlayProps> = ({
   const { width: townImageWidth, height: townImageHeight } =
     townImageSize;
   const showHighlight = isDragging && canAssignVillager;
-  const top =
-    building.position.y * townImageHeight -
-    (BUILDING_OVERLAY_HEIGHT / 2) * townImageHeight;
-  const left =
-    building.position.x * townImageWidth -
-    (BUILDING_OVERLAY_WIDTH / 2) * townImageWidth;
+  const top = building.position.y * townImageHeight;
+  const left = building.position.x * townImageWidth;
   const width = BUILDING_OVERLAY_WIDTH * townImageWidth;
   const height = BUILDING_OVERLAY_HEIGHT * townImageHeight;
 
