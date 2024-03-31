@@ -12,20 +12,27 @@ import { DraggingVillagerContext } from "features/town/context";
 import { VILLAGER_ID_TO_VILLAGER } from "features/villager/constants";
 import { VillagerDialog } from "features/villager/components";
 
-interface TownVillagerAvatarProps {
+interface VillagerAvatarProps {
   villagerId: number;
   size?: number;
+  canDrag?: boolean;
+  hasBorder?: boolean;
   borderColor?: string;
+  hasDialog?: boolean;
 }
 
-export const TownVillagerAvatar: FC<TownVillagerAvatarProps> = ({
+export const VillagerAvatar: FC<VillagerAvatarProps> = ({
   villagerId,
   size = 40,
+  canDrag = true,
+  hasBorder = true,
   borderColor = "white",
+  hasDialog = true,
 }) => {
   // Hooks
   const [{ isDragging }, drag] = useDrag(
     () => ({
+      canDrag,
       collect: (monitor) => ({
         isDragging: !!monitor.isDragging(),
       }),
@@ -64,13 +71,13 @@ export const TownVillagerAvatar: FC<TownVillagerAvatarProps> = ({
   return (
     <>
       <Avatar
-        onDoubleClick={onDoubleClick}
+        onDoubleClick={hasDialog ? onDoubleClick : undefined}
         ref={drag}
         src={villager.image}
         sx={{
           width: size,
           height: size,
-          borderWidth: 2,
+          borderWidth: hasBorder ? 2 : 0,
           borderStyle: "solid",
           borderColor,
           opacity: isDragging ? 0 : 1,

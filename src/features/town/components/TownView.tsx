@@ -16,11 +16,8 @@ import {
   TownResources,
 } from "features/resource/components";
 import { NextTurnButton } from "features/system/components";
-import {
-  TownImage,
-  TownPopulation,
-  TownVillagerAvatar,
-} from "features/town/components";
+import { TownImage, TownPopulation } from "features/town/components";
+import { VillagerAvatar } from "features/villager/components";
 // Context
 import { DraggingVillagerContext } from "features/town/context";
 // Hooks
@@ -123,7 +120,7 @@ export const TownView = () => {
                 <Grid container spacing={1}>
                   {unassignedVillagerIds.map((id) => (
                     <Grid item key={id}>
-                      <TownVillagerAvatar
+                      <VillagerAvatar
                         villagerId={id}
                         borderColor="containerBorder.main"
                       />

@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 // LOCAL FILES
 // Components
 import { BuildingTooltip } from "features/building/components";
-import { TownVillagerAvatar } from "features/town/components";
+import { VillagerAvatar } from "features/villager/components";
 // Constants
 import { BUILDING_ID_TO_BUILDING } from "features/building/constants";
 import {
@@ -131,9 +131,10 @@ export const BuildingOverlay: FC<BuildingOverlayProps> = ({
         >
           {assignedVillagerIds.map((villagerId) => (
             <Grid key={villagerId} item>
-              <TownVillagerAvatar
+              <VillagerAvatar
                 villagerId={villagerId}
                 size={width / 3}
+                hasDialog={false}
               />
             </Grid>
           ))}

@@ -3,7 +3,6 @@ import type { FC } from "react";
 
 // PUBLIC MODULES
 import {
-  Avatar,
   Button,
   Grid,
   Table,
@@ -24,10 +23,10 @@ import {
   StyledContainer,
   StyledGrid,
 } from "features/common/components";
+import { VillagerAvatar } from "features/villager/components";
 // Constants
 import { BUILDING_ID_TO_BUILDING } from "features/building/constants";
 import { RESOURCE_TO_IMAGE } from "features/resource/constants";
-import { VILLAGER_ID_TO_VILLAGER } from "features/villager/constants";
 // Hooks
 import { useAppSelector } from "features/redux/hooks";
 // Interfaces & Types
@@ -68,12 +67,16 @@ const ResourceViewRow: FC<ResourceViewRowProps> = ({
       <TableCell>
         {assignedVillagerIds.length === 0 && "-"}
         {assignedVillagerIds.length !== 0 && (
-          <Grid container>
+          <Grid container spacing={1}>
             {assignedVillagerIds.map((villagerId) => (
-              <Avatar
-                key={villagerId}
-                src={VILLAGER_ID_TO_VILLAGER[villagerId].image}
-              />
+              <Grid item>
+                <VillagerAvatar
+                  key={villagerId}
+                  villagerId={villagerId}
+                  canDrag={false}
+                  hasBorder={false}
+                />
+              </Grid>
             ))}
           </Grid>
         )}
