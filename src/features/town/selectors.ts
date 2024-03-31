@@ -21,7 +21,7 @@ export const selectMaxPopulation = createSelector(
   (buildings) => {
     const populationBuildings = buildings.filter((building) =>
       BUILDING_ID_TO_BUILDING[building.id].effects.includes(
-        "POPULATION",
+        "INCREASE_POPULATION",
       ),
     );
     let maxPopulation = 0;

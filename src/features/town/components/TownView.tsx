@@ -29,7 +29,7 @@ import {
   selectUnassignedVillagerIds,
   selectVillagersAvailableToRecruit,
 } from "features/villager/selectors";
-import { unassignVillager } from "features/villager/villagerBuildingSlice";
+import { unassignVillager } from "features/villagerBuilding/villagerBuildingSlice";
 import { addVillager } from "features/villager/villagerSlice";
 
 export const TownView = () => {

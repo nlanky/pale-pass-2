@@ -6,11 +6,12 @@ import { Avatar } from "@mui/material";
 import { useDrag } from "react-dnd";
 
 // LOCAL FILES
+// Components
+import { VillagerDialog } from "features/villager/components";
+// Constants
+import { VILLAGER_ID_TO_VILLAGER } from "features/villager/constants";
 // Context
 import { DraggingVillagerContext } from "features/town/context";
-// Interfaces & Types
-import { VILLAGER_ID_TO_VILLAGER } from "features/villager/constants";
-import { VillagerDialog } from "features/villager/components";
 
 interface VillagerAvatarProps {
   villagerId: number;

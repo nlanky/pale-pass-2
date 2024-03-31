@@ -4,26 +4,26 @@ import { createSelector } from "@reduxjs/toolkit";
 // LOCAL FILES
 // Interfaces & Types
 import type { RootState } from "features/redux/store";
-import type { Resources } from "features/resource/types";
+import type { Resource } from "features/resource/constants";
 // Redux
 import {
   selectBuildingById,
   selectBuildings,
 } from "features/building/selectors";
-import { selectVillagerAssignments } from "features/villager/selectors";
+import { selectVillagerAssignments } from "features/villagerBuilding/selectors";
 // Utility functions
 import {
   getBuildingResourcesPerTurn,
   mergeResources,
 } from "features/resource/utils";
 
-export const selectResourcesTotal = (state: RootState) =>
+export const selectTotalResources = (state: RootState) =>
   state.resource.total;
 
 export const selectResourcesPerTurn = createSelector(
   [selectBuildings, selectVillagerAssignments],
   (buildings, assignments) => {
-    let resources: Resources = {
+    let resources: Record<Resource, number> = {
       Wood: 0,
       Stone: 0,
       Iron: 0,

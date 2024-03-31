@@ -19,8 +19,8 @@ import { buildingReducer } from "features/building/buildingSlice";
 import { resourceReducer } from "features/resource/resourceSlice";
 import { systemReducer } from "features/system/systemSlice";
 import { townReducer } from "features/town/townSlice";
-import { villagerBuildingReducer } from "features/villager/villagerBuildingSlice";
 import { villagerReducer } from "features/villager/villagerSlice";
+import { villagerBuildingReducer } from "features/villagerBuilding/villagerBuildingSlice";
 
 const rootReducer = combineReducers({
   building: buildingReducer,

@@ -1,18 +1,30 @@
 // LOCAL FILES
 // Constants
 import { BUILDING_ID_TO_BUILDING } from "features/building/constants";
+import {
+  NO_RESOURCES,
+  type Resource,
+  RESOURCE_TO_TRADE_RATES,
+} from "features/resource/constants";
 // Interfaces & Types
 import type { TownBuilding } from "features/building/types";
-import type { Resource, Resources } from "features/resource/types";
 import type { VillagerBuildingAssignment } from "features/villager/types";
+
+/**
+ * Simple function to create a full Resources object from a partial definition.
+ */
+export const createFullResourcesObject = (
+  resources: Partial<Record<Resource, number>>,
+): Record<Resource, number> =>
+  Object.assign({ ...NO_RESOURCES }, resources);
 
 /**
  * Simple function to merge two resource objects together into a new object.
  */
 export const mergeResources = (
-  resources1: Resources,
-  resources2: Resources,
-): Resources => {
+  resources1: Record<Resource, number>,
+  resources2: Record<Resource, number>,
+): Record<Resource, number> => {
   const mergedResources = { ...resources1 };
   (Object.keys(resources2) as Resource[]).forEach((resource) => {
     mergedResources[resource] += resources2[resource];
@@ -27,10 +39,10 @@ export const mergeResources = (
 export const getBuildingResourcesPerTurn = (
   townBuilding: TownBuilding,
   assignments: VillagerBuildingAssignment[],
-): Resources => {
+): Record<Resource, number> => {
   const { id } = townBuilding;
   const building = BUILDING_ID_TO_BUILDING[id];
-  const resources: Resources = {
+  const resources: Record<Resource, number> = {
     Wood: 0,
     Stone: 0,
     Iron: 0,
@@ -70,4 +82,36 @@ export const getBuildingResourcesPerTurn = (
     }
   });
   return resources;
+};
+
+/**
+ * Finds the minimum quantity of a resource that can be traded to ensure
+ * the resource the player receives is a whole number.
+ */
+export const getMinTradeQuantity = (
+  fromResource: Resource,
+  toResource: Resource,
+): number => {
+  const tradeRate = RESOURCE_TO_TRADE_RATES[fromResource][toResource];
+  let quantity = 1;
+  while (quantity * tradeRate !== Math.round(quantity * tradeRate)) {
+    quantity++;
+  }
+
+  return quantity;
+};
+
+/**
+ * Calculates max quantity of a resource player can trade for based on their
+ * current resources. Takes into account minimum quantity required for trade.
+ */
+export const getMaxTradeQuantity = (
+  resources: Record<Resource, number>,
+  fromResource: Resource,
+  toResource: Resource,
+): number => {
+  const resourceAmount = resources[fromResource];
+  const minQuantity = getMinTradeQuantity(fromResource, toResource);
+  const maxNumberOfTrades = Math.floor(resourceAmount / minQuantity);
+  return maxNumberOfTrades * minQuantity;
 };

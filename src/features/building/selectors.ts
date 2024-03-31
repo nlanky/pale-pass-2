@@ -8,7 +8,7 @@ import { BUILDING_ID_TO_BUILDING } from "features/building/constants";
 import type { RootState } from "features/redux/store";
 // Redux
 import { buildingAdapter } from "features/building/buildingSlice";
-import { selectVillagerAssignments } from "features/villager/selectors";
+import { selectVillagerAssignments } from "features/villagerBuilding/selectors";
 
 const selectBuildingId = (_: RootState, id: number) => id;
 

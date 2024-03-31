@@ -1,10 +1,17 @@
 // PUBLIC MODULES
-import { Button, Container, Grid, Typography } from "@mui/material";
+import {
+  Button,
+  Container,
+  Divider,
+  Grid,
+  Typography,
+} from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
 
 // LOCAL FILES
 // Components
 import { Image, StyledGrid } from "features/common/components";
+import { ResourceTrade } from "features/resource/components";
 // Constants
 import { BUILDING_ID_TO_BUILDING } from "features/building/constants";
 // Hooks
@@ -22,6 +29,7 @@ import {
 
 export const BuildingView = () => {
   // Hooks
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   // Router
@@ -36,7 +44,6 @@ export const BuildingView = () => {
   const building = BUILDING_ID_TO_BUILDING[buildingId];
 
   // Hooks
-  const dispatch = useAppDispatch();
   const currentTier = useAppSelector((state) =>
     selectBuildingTier(state, buildingId),
   );
@@ -66,7 +73,7 @@ export const BuildingView = () => {
   };
 
   // Derived variables
-  const canBuild = currentTier === undefined;
+  const isBuilt = currentTier !== undefined;
   const canUpgrade = currentTier && currentTier < building.maxTier;
 
   return (
@@ -95,7 +102,14 @@ export const BuildingView = () => {
           </Grid>
         </Grid>
 
-        {canBuild && (
+        {isBuilt && building.effects.includes("TRADE_RESOURCES") && (
+          <>
+            <Divider flexItem sx={{ mt: 1 }} />
+            <ResourceTrade />
+          </>
+        )}
+
+        {!isBuilt && (
           <Button onClick={onBuild} sx={{ mt: 1 }}>
             Build
           </Button>

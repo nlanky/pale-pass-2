@@ -26,11 +26,12 @@ import {
 import { VillagerAvatar } from "features/villager/components";
 // Constants
 import { BUILDING_ID_TO_BUILDING } from "features/building/constants";
-import { RESOURCE_TO_IMAGE } from "features/resource/constants";
+import {
+  type Resource,
+  RESOURCE_TO_IMAGE,
+} from "features/resource/constants";
 // Hooks
 import { useAppSelector } from "features/redux/hooks";
-// Interfaces & Types
-import type { Resource } from "features/resource/types";
 // Redux
 import {
   selectBuildingIds,
@@ -69,9 +70,8 @@ const ResourceViewRow: FC<ResourceViewRowProps> = ({
         {assignedVillagerIds.length !== 0 && (
           <Grid container spacing={1}>
             {assignedVillagerIds.map((villagerId) => (
-              <Grid item>
+              <Grid item key={villagerId}>
                 <VillagerAvatar
-                  key={villagerId}
                   villagerId={villagerId}
                   canDrag={false}
                   hasBorder={false}

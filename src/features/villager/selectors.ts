@@ -7,8 +7,8 @@ import { VILLAGER_ID_TO_VILLAGER } from "features/villager/constants";
 // Interfaces & Types
 import type { RootState } from "features/redux/store";
 // Redux
-import { villagerBuildingAdapter } from "features/villager/villagerBuildingSlice";
 import { villagerAdapter } from "features/villager/villagerSlice";
+import { selectAssignedVillagerIds } from "features/villagerBuilding/selectors";
 
 export const {
   selectAll: selectVillagers,
@@ -16,14 +16,6 @@ export const {
   selectIds: selectVillagerIds,
 } = villagerAdapter.getSelectors<RootState>(
   (state) => state.villager,
-);
-
-export const {
-  selectAll: selectVillagerAssignments,
-  selectById: selectVillagerAssignmentById,
-  selectIds: selectAssignedVillagerIds,
-} = villagerBuildingAdapter.getSelectors<RootState>(
-  (state) => state.villagerBuilding,
 );
 
 // TODO: Remove this in favour of different system

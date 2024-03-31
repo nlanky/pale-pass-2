@@ -78,3 +78,9 @@ declare module "@mui/material/styles" {
     containerBorder: PaletteColorOptions;
   }
 }
+
+declare module "@mui/material/Slider" {
+  interface SliderPropsColorOverrides {
+    containerBorder: true;
+  }
+}

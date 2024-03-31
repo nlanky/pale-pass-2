@@ -25,7 +25,7 @@ import {
   selectCanAssignVillagerToBuilding,
   selectVillagerIdsAssignedToBuilding,
 } from "features/building/selectors";
-import { assignVillager } from "features/villager/villagerBuildingSlice";
+import { assignVillager } from "features/villagerBuilding/villagerBuildingSlice";
 
 interface BuildingOverlayProps {
   buildingId: number;

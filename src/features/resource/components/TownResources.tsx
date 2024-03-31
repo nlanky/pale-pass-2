@@ -6,19 +6,20 @@ import { ArrowDownward, ArrowUpward } from "@mui/icons-material";
 // Components
 import { Image, StyledGrid } from "features/common/components";
 // Constants
-import { RESOURCE_TO_IMAGE } from "features/resource/constants";
-// Interfaces & Types
-import type { Resource } from "features/resource/types";
+import {
+  type Resource,
+  RESOURCE_TO_IMAGE,
+} from "features/resource/constants";
 // Redux
 import { useAppSelector } from "features/redux/hooks";
 import {
   selectResourcesPerTurn,
-  selectResourcesTotal,
+  selectTotalResources,
 } from "features/resource/selectors";
 
 export const TownResources = () => {
   const resources = useAppSelector((state) =>
-    selectResourcesTotal(state),
+    selectTotalResources(state),
   );
   const resourcesPerTurn = useAppSelector((state) =>
     selectResourcesPerTurn(state),
