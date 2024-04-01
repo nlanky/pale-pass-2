@@ -29,6 +29,16 @@ export const POPULATION_PER_BUILDING_TIER = 10;
 
 export const RESOURCE_STORAGE_PER_BUILDING_TIER = 100;
 
+export const BUILDING_OVERLAY_AVATAR_SIZE = 32;
+
+// Fits three villager avatars + border
+export const BUILDING_OVERLAY_WIDTH =
+  BUILDING_OVERLAY_AVATAR_SIZE * 3 + 2 * 2;
+
+// Fits two villager avatars + border
+export const BUILDING_OVERLAY_HEIGHT =
+  BUILDING_OVERLAY_AVATAR_SIZE * 2 + 2 * 2;
+
 export const BUILDING_ID_TO_BUILDING: Record<number, Building> = {
   1: new Building({
     id: 1,

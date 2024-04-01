@@ -11,11 +11,12 @@ import { useNavigate } from "react-router-dom";
 import { BuildingTooltip } from "features/building/components";
 import { VillagerAvatar } from "features/villager/components";
 // Constants
-import { BUILDING_ID_TO_BUILDING } from "features/building/constants";
 import {
+  BUILDING_ID_TO_BUILDING,
+  BUILDING_OVERLAY_AVATAR_SIZE,
   BUILDING_OVERLAY_HEIGHT,
   BUILDING_OVERLAY_WIDTH,
-} from "features/town/constants";
+} from "features/building/constants";
 // Context
 import { DraggingVillagerContext } from "features/town/context";
 // Hooks
@@ -56,11 +57,8 @@ export const BuildingOverlay: FC<BuildingOverlayProps> = ({
   const building = BUILDING_ID_TO_BUILDING[buildingId];
   const { width: townImageWidth, height: townImageHeight } =
     townImageSize;
-  const showHighlight = isDragging && canAssignVillager;
   const top = building.position.y * townImageHeight;
   const left = building.position.x * townImageWidth;
-  const width = BUILDING_OVERLAY_WIDTH * townImageWidth;
-  const height = BUILDING_OVERLAY_HEIGHT * townImageHeight;
 
   // Hooks
   const [_, drop] = useDrop(
@@ -102,25 +100,17 @@ export const BuildingOverlay: FC<BuildingOverlayProps> = ({
           navigate(`/building/${building.id}`);
         }}
         ref={drop}
-        sx={[
-          {
-            position: "absolute",
-            top,
-            left,
-            width,
-            height,
-            cursor: "pointer",
-          },
-          showHighlight && {
-            top: top - 1,
-            left: left - 1,
-            width: width + 2,
-            height: height + 2,
-            borderWidth: 1,
-            borderStyle: "solid",
-            borderColor: "white",
-          },
-        ]}
+        sx={{
+          position: "absolute",
+          top: top - 2,
+          left: left - 2,
+          width: BUILDING_OVERLAY_WIDTH,
+          height: BUILDING_OVERLAY_HEIGHT,
+          borderWidth: 2,
+          borderStyle: "solid",
+          borderColor: "containerBorder.main",
+          cursor: "pointer",
+        }}
       >
         {/* ASSIGNED VILLAGERS */}
         <Grid
@@ -133,7 +123,7 @@ export const BuildingOverlay: FC<BuildingOverlayProps> = ({
             <Grid key={villagerId} item>
               <VillagerAvatar
                 villagerId={villagerId}
-                size={width / 3}
+                size={BUILDING_OVERLAY_AVATAR_SIZE}
                 hasDialog={false}
               />
             </Grid>
