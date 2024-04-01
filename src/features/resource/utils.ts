@@ -5,6 +5,7 @@ import {
   NO_RESOURCES,
   type Resource,
   RESOURCE_TO_TRADE_RATES,
+  type Resources,
 } from "features/resource/constants";
 // Interfaces & Types
 import type { TownBuilding } from "features/building/types";
@@ -14,17 +15,16 @@ import type { VillagerBuildingAssignment } from "features/villager/types";
  * Simple function to create a full Resources object from a partial definition.
  */
 export const createFullResourcesObject = (
-  resources: Partial<Record<Resource, number>>,
-): Record<Resource, number> =>
-  Object.assign({ ...NO_RESOURCES }, resources);
+  resources: Partial<Resources>,
+): Resources => Object.assign({ ...NO_RESOURCES }, resources);
 
 /**
  * Simple function to merge two resource objects together into a new object.
  */
 export const mergeResources = (
-  resources1: Record<Resource, number>,
-  resources2: Record<Resource, number>,
-): Record<Resource, number> => {
+  resources1: Resources,
+  resources2: Resources,
+): Resources => {
   const mergedResources = { ...resources1 };
   (Object.keys(resources2) as Resource[]).forEach((resource) => {
     mergedResources[resource] += resources2[resource];
@@ -39,10 +39,10 @@ export const mergeResources = (
 export const getBuildingResourcesPerTurn = (
   townBuilding: TownBuilding,
   assignments: VillagerBuildingAssignment[],
-): Record<Resource, number> => {
+): Resources => {
   const { id } = townBuilding;
   const building = BUILDING_ID_TO_BUILDING[id];
-  const resources: Record<Resource, number> = {
+  const resources: Resources = {
     Wood: 0,
     Stone: 0,
     Iron: 0,
@@ -61,6 +61,7 @@ export const getBuildingResourcesPerTurn = (
   );
   building.effects.forEach((effect) => {
     switch (effect) {
+      // TODO: Better trained villagers should gather more resources
       case "COLLECT_WOOD":
         resources.Wood += assignedVillagers * 1;
         break;
@@ -106,7 +107,7 @@ export const getMinTradeQuantity = (
  * current resources. Takes into account minimum quantity required for trade.
  */
 export const getMaxTradeQuantity = (
-  resources: Record<Resource, number>,
+  resources: Resources,
   fromResource: Resource,
   toResource: Resource,
 ): number => {
@@ -114,4 +115,19 @@ export const getMaxTradeQuantity = (
   const minQuantity = getMinTradeQuantity(fromResource, toResource);
   const maxNumberOfTrades = Math.floor(resourceAmount / minQuantity);
   return maxNumberOfTrades * minQuantity;
+};
+
+export const getNextTurnResources = (
+  currentResources: Resources,
+  buildings: TownBuilding[],
+  assignments: VillagerBuildingAssignment[],
+): Resources => {
+  let nextResources = { ...currentResources };
+  buildings.forEach((building) => {
+    nextResources = mergeResources(
+      nextResources,
+      getBuildingResourcesPerTurn(building, assignments),
+    );
+  });
+  return nextResources;
 };

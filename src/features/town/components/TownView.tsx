@@ -2,7 +2,7 @@
 import { useState } from "react";
 
 // PUBLIC MODULES
-import { Avatar, Grid, Typography } from "@mui/material";
+import { Grid, Typography } from "@mui/material";
 import { useDrop } from "react-dnd";
 
 // LOCAL FILES
@@ -22,24 +22,15 @@ import { VillagerAvatar } from "features/villager/components";
 import { DraggingVillagerContext } from "features/town/context";
 // Hooks
 import { useAppDispatch, useAppSelector } from "features/redux/hooks";
-// Interfaces & Types
-import type { Villager } from "features/villager/classes";
 // Redux
-import {
-  selectUnassignedVillagerIds,
-  selectVillagersAvailableToRecruit,
-} from "features/villager/selectors";
+import { selectUnassignedVillagerIds } from "features/villager/selectors";
 import { unassignVillager } from "features/villagerBuilding/villagerBuildingSlice";
-import { addVillager } from "features/villager/villagerSlice";
 
 export const TownView = () => {
   // Hooks
   const dispatch = useAppDispatch();
   const unassignedVillagerIds = useAppSelector(
     selectUnassignedVillagerIds,
-  );
-  const villagersAvailableToRecruit = useAppSelector(
-    selectVillagersAvailableToRecruit,
   );
   const [_, drop] = useDrop(
     () => ({
@@ -54,16 +45,6 @@ export const TownView = () => {
   // Local state
   const [draggingVillager, setDraggingVillager] = useState(false);
 
-  // Handlers
-  const onRecruit = (villager: Villager) => {
-    dispatch(
-      addVillager({
-        id: villager.id,
-        stats: villager.startingStats,
-      }),
-    );
-  };
-
   return (
     <DraggingVillagerContext.Provider
       value={{
@@ -75,34 +56,6 @@ export const TownView = () => {
         <Grid container spacing={1}>
           <Grid item xs={10}>
             <TownImage />
-
-            {/* VILLAGERS TO RECRUIT */}
-            <StyledBox sx={{ width: 1, p: 1, mt: 1 }}>
-              <Typography sx={{ mb: 1 }} variant="body1">
-                Available to Recruit
-              </Typography>
-
-              {villagersAvailableToRecruit.length === 0 && (
-                <Typography variant="body1">
-                  No villagers available
-                </Typography>
-              )}
-
-              {villagersAvailableToRecruit.length !== 0 && (
-                <Grid container spacing={1}>
-                  {villagersAvailableToRecruit.map((villager) => (
-                    <Grid item key={villager.id}>
-                      <Avatar
-                        onClick={() => {
-                          onRecruit(villager);
-                        }}
-                        src={villager.image}
-                      />
-                    </Grid>
-                  ))}
-                </Grid>
-              )}
-            </StyledBox>
 
             {/* UNASSIGNED VILLAGERS */}
             <StyledBox sx={{ width: 1, p: 1, mt: 1 }}>

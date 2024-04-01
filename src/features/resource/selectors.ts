@@ -4,7 +4,7 @@ import { createSelector } from "@reduxjs/toolkit";
 // LOCAL FILES
 // Interfaces & Types
 import type { RootState } from "features/redux/store";
-import type { Resource } from "features/resource/constants";
+import type { Resources } from "features/resource/constants";
 // Redux
 import {
   selectBuildingById,
@@ -23,7 +23,7 @@ export const selectTotalResources = (state: RootState) =>
 export const selectResourcesPerTurn = createSelector(
   [selectBuildings, selectVillagerAssignments],
   (buildings, assignments) => {
-    let resources: Record<Resource, number> = {
+    let resources: Resources = {
       Wood: 0,
       Stone: 0,
       Iron: 0,

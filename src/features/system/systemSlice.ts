@@ -8,7 +8,11 @@ import { TURNS_PER_ATTRACT } from "features/system/constants";
 import type { AppThunk } from "features/redux/store";
 import type { TownVillager } from "features/villager/types";
 // Redux
-import { selectBuildingNames } from "features/building/selectors";
+import {
+  selectBuildingNames,
+  selectBuildings,
+} from "features/building/selectors";
+import { updateResources } from "features/resource/resourceSlice";
 import { setTurn } from "features/system/actions";
 import { selectMaxPopulation } from "features/town/selectors";
 import {
@@ -25,10 +29,12 @@ import {
 } from "features/villager/villagerSlice";
 import { selectVillagerAssignments } from "features/villagerBuilding/selectors";
 // Utility functions
+import { getNextTurnResources } from "features/resource/utils";
 import {
   getVillagerToAttract,
   trainVillager,
 } from "features/villager/utils";
+import { selectTotalResources } from "features/resource/selectors";
 
 interface SystemState {
   turn: number;
@@ -54,7 +60,7 @@ export const systemReducer = systemSlice.reducer;
 // THUNKS
 export const setTurnThunk =
   (turn: number): AppThunk =>
-  async (dispatch, getState) => {
+  (dispatch, getState) => {
     const state = getState();
 
     // Attract villager
@@ -99,6 +105,18 @@ export const setTurnThunk =
       });
     });
     dispatch(updateVillagers(villagerUpdates));
+
+    // Gather resources
+    const buildings = selectBuildings(state);
+    dispatch(
+      updateResources(
+        getNextTurnResources(
+          selectTotalResources(state),
+          buildings,
+          villagerAssignments,
+        ),
+      ),
+    );
 
     // Finally, update turn
     dispatch(setTurn(turn));

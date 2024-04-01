@@ -30,15 +30,6 @@ export const selectVillagerNames = createSelector(
     ),
 );
 
-// TODO: Remove this in favour of different system
-export const selectVillagersAvailableToRecruit = createSelector(
-  [selectVillagerIds],
-  (villagerIds) =>
-    Object.values(VILLAGER_ID_TO_VILLAGER).filter(
-      (villager) => !villagerIds.includes(villager.id),
-    ),
-);
-
 export const selectUnassignedVillagerIds = createSelector(
   [selectVillagerIds, selectAssignedVillagerIds],
   (villagerIds, assignedVillagerIds) =>

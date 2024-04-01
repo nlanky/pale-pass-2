@@ -84,7 +84,7 @@ const ResourceViewRow: FC<ResourceViewRowProps> = ({
       <TableCell>
         <Grid alignItems="center" container wrap="nowrap">
           {(Object.keys(resourcesPerTurn) as Resource[]).map(
-            (resource, index) => {
+            (resource) => {
               const rpt = resourcesPerTurn[resource];
               if (rpt === 0) {
                 return null;
@@ -102,7 +102,7 @@ const ResourceViewRow: FC<ResourceViewRowProps> = ({
                   container
                   key={resource}
                   item
-                  sx={[{ width: "auto" }, index !== 0 && { ml: 1 }]}
+                  sx={[{ width: "auto" }]}
                 >
                   <Image
                     src={RESOURCE_TO_IMAGE[resource]}

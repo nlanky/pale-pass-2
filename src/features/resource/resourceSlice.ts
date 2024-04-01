@@ -7,6 +7,7 @@ import {
   NO_RESOURCES,
   type Resource,
   RESOURCE_TO_TRADE_RATES,
+  type Resources,
 } from "features/resource/constants";
 // Utility functions
 import {
@@ -15,7 +16,7 @@ import {
 } from "features/resource/utils";
 
 interface ResourceState {
-  total: Record<Resource, number>;
+  total: Resources;
 }
 
 const initialState: ResourceState = {
@@ -43,8 +44,12 @@ export const resourceSlice = createSlice({
       });
       state.total = mergeResources(state.total, resourceChanges);
     },
+    updateResources: (state, action: PayloadAction<Resources>) => {
+      state.total = action.payload;
+    },
   },
 });
 
-export const { tradeResources } = resourceSlice.actions;
+export const { tradeResources, updateResources } =
+  resourceSlice.actions;
 export const resourceReducer = resourceSlice.reducer;

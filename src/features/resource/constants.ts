@@ -19,8 +19,9 @@ export const RESOURCES = [
 ] as const;
 
 export type Resource = (typeof RESOURCES)[number];
+export type Resources = Record<Resource, number>;
 
-export const NO_RESOURCES: Record<Resource, number> = {
+export const NO_RESOURCES: Resources = {
   Wood: 0,
   Stone: 0,
   Iron: 0,
@@ -39,10 +40,7 @@ export const RESOURCE_TO_IMAGE: Record<Resource, string> = {
 };
 
 /** How much 1 of the resource is worth compared to the other resources */
-export const RESOURCE_TO_TRADE_RATES: Record<
-  Resource,
-  Record<Resource, number>
-> = {
+export const RESOURCE_TO_TRADE_RATES: Record<Resource, Resources> = {
   Wood: {
     Wood: 1,
     Stone: 1,
