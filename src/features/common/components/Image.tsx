@@ -6,7 +6,11 @@ export const Image = forwardRef<
   ImgHTMLAttributes<HTMLImageElement>
 >(({ style, ...rest }, ref) => {
   // Derived variables
-  const combinedStyle = { display: "block", width: "100%", ...style };
+  const combinedStyle = {
+    display: "inline-block",
+    width: "100%",
+    ...style,
+  };
 
   return (
     <img loading="lazy" ref={ref} style={combinedStyle} {...rest} />

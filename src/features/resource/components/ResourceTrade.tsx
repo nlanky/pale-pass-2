@@ -2,7 +2,17 @@
 import { type FC, useState } from "react";
 
 // PUBLIC MODULES
-import { Button, Grid, Slider, Typography } from "@mui/material";
+import {
+  Button,
+  Grid,
+  Slider,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  Typography,
+} from "@mui/material";
 import {
   ArrowRightAlt as ArrowRightAltIcon,
   Handshake as HandshakeIcon,
@@ -83,111 +93,132 @@ export const ResourceTrade: FC<{}> = () => {
       "We kindly ask you to treat our valuable goods with care. If you are interested in making a trade, simply select the items you would like to exchange and those you wish to receive by clicking on them.";
   }
 
+  const tableResources: Resource[][] = [];
+  let tableRowIndex = 0;
+  RESOURCES.forEach((resource) => {
+    if (tableResources[tableRowIndex]?.length === 2) {
+      tableRowIndex += 1;
+    }
+
+    if (!tableResources[tableRowIndex]) {
+      tableResources[tableRowIndex] = [];
+    }
+
+    tableResources[tableRowIndex].push(resource);
+  });
+
   return (
     <Grid container direction="column" sx={{ mt: 1 }}>
       <Typography variant="body1">{tradeText}</Typography>
 
-      <Grid container item spacing={1} sx={{ mt: 0 }} wrap="nowrap">
-        <Grid container direction="column" item>
-          <Typography align="center" variant="body1">
-            Player Resources
-          </Typography>
+      <Table size="small">
+        <TableHead>
+          <TableRow>
+            <TableCell
+              align="center"
+              colSpan={2}
+              sx={{ borderColor: "divider" }}
+            >
+              <Typography variant="body1">
+                Player Resources
+              </Typography>
+            </TableCell>
+            <TableCell
+              align="center"
+              colSpan={2}
+              sx={{ borderColor: "divider" }}
+            >
+              <Typography variant="body1">
+                Resources to Trade
+              </Typography>
+            </TableCell>
+          </TableRow>
+        </TableHead>
 
-          <Grid container item sx={{ mt: 1 }}>
-            {RESOURCES.map((resource) => {
-              const isSelected = resource === fromResource;
-              const playerAmount = totalResources[resource];
-              return (
-                <Grid
-                  alignItems="center"
-                  container
-                  direction="column"
-                  item
-                  key={`from_${resource}`}
-                  onClick={() => {
-                    onSelectFromResource(resource);
-                  }}
-                  sx={{
-                    border: 2,
-                    borderColor: isSelected
-                      ? "containerBorder.light"
-                      : "containerBorder.dark",
-                    cursor: "pointer",
-                    p: 0.5,
-                  }}
-                  xs={6}
-                >
-                  <Image
-                    src={RESOURCE_TO_IMAGE[resource]}
-                    style={{ width: 64 }}
-                  />
-                  <Typography variant="body1">
-                    {playerAmount}
-                  </Typography>
-                </Grid>
-              );
-            })}
-          </Grid>
-        </Grid>
+        <TableBody>
+          {tableResources.map((rowResources, index) => (
+            <TableRow key={`row_${index}`}>
+              {/* PLAYER RESOURCES */}
+              {rowResources.map((resource) => {
+                const isSelected = fromResource === resource;
+                return (
+                  <TableCell
+                    align="center"
+                    key={`player_resource_cell_${resource}`}
+                    onClick={() => {
+                      onSelectFromResource(resource);
+                    }}
+                    sx={{
+                      bgcolor: isSelected
+                        ? "containerBackground.light"
+                        : "transparent",
+                      borderColor: "divider",
+                      cursor: "pointer",
+                      "&:hover": {
+                        bgcolor: "containerBackground.light",
+                      },
+                    }}
+                  >
+                    <Image
+                      src={RESOURCE_TO_IMAGE[resource]}
+                      style={{ width: 64 }}
+                    />
+                    <Typography variant="body1">
+                      {totalResources[resource]}
+                    </Typography>
+                  </TableCell>
+                );
+              })}
 
-        <Grid container direction="column" item>
-          <Typography align="center" noWrap variant="body1">
-            Available for Trade
-          </Typography>
-
-          <Grid container item sx={{ mt: 1 }}>
-            {RESOURCES.map((resource) => {
-              const isSelected = resource === toResource;
-              let tradeRate = NaN;
-              let tradeRateText = "";
-              if (fromResource) {
-                tradeRate =
-                  RESOURCE_TO_TRADE_RATES[fromResource][resource];
-                if (fromResource === resource) {
-                  tradeRateText = "N/A";
-                } else if (Math.round(tradeRate) === tradeRate) {
-                  tradeRateText = `1 / ${tradeRate}`;
-                } else {
-                  tradeRateText = `1 / ${tradeRate.toFixed(2)}`;
+              {/* TRADE RATE */}
+              {rowResources.map((resource) => {
+                const isSelected = toResource === resource;
+                let tradeRate = NaN;
+                let tradeRateText = "";
+                if (fromResource) {
+                  tradeRate =
+                    RESOURCE_TO_TRADE_RATES[fromResource][resource];
+                  if (fromResource === resource) {
+                    tradeRateText = "N/A";
+                  } else if (Math.round(tradeRate) === tradeRate) {
+                    tradeRateText = `1 / ${tradeRate}`;
+                  } else {
+                    tradeRateText = `1 / ${tradeRate.toFixed(2)}`;
+                  }
                 }
-              }
 
-              return (
-                <Grid
-                  alignItems="center"
-                  container
-                  direction="column"
-                  item
-                  key={`to_${resource}`}
-                  onClick={() => {
-                    onSelectToResource(resource);
-                  }}
-                  sx={{
-                    border: 2,
-                    borderColor: isSelected
-                      ? "containerBorder.light"
-                      : "containerBorder.dark",
-                    cursor: "pointer",
-                    p: 0.5,
-                  }}
-                  xs={6}
-                >
-                  <Image
-                    src={RESOURCE_TO_IMAGE[resource]}
-                    style={{ width: 64 }}
-                  />
-
-                  {fromResource && (
+                return (
+                  <TableCell
+                    align="center"
+                    key={`trade_rate_cell_${resource}`}
+                    onClick={() => {
+                      onSelectToResource(resource);
+                    }}
+                    sx={{
+                      bgcolor: isSelected
+                        ? "containerBackground.light"
+                        : "transparent",
+                      borderColor: "divider",
+                      cursor: "pointer",
+                      "&:hover": {
+                        bgcolor: "containerBackground.light",
+                      },
+                    }}
+                  >
+                    <Image
+                      src={RESOURCE_TO_IMAGE[resource]}
+                      style={{ width: 64 }}
+                    />
                     <Typography variant="body1">
                       {tradeRateText}
                     </Typography>
-                  )}
-                </Grid>
-              );
-            })}
-          </Grid>
-        </Grid>
-      </Grid>
+                  </TableCell>
+                );
+              })}
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
 
       {fromResource && toResource && (
         <>

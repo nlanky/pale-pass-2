@@ -1,11 +1,5 @@
 // PUBLIC MODULES
-import {
-  Button,
-  Container,
-  Divider,
-  Grid,
-  Typography,
-} from "@mui/material";
+import { Button, Container, Grid, Typography } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
 
 // LOCAL FILES
@@ -103,10 +97,7 @@ export const BuildingView = () => {
         </Grid>
 
         {isBuilt && building.effects.includes("TRADE_RESOURCES") && (
-          <>
-            <Divider flexItem sx={{ mt: 1 }} />
-            <ResourceTrade />
-          </>
+          <ResourceTrade />
         )}
 
         {!isBuilt && (
