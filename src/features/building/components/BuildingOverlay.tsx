@@ -100,17 +100,23 @@ export const BuildingOverlay: FC<BuildingOverlayProps> = ({
           navigate(`/building/${building.id}`);
         }}
         ref={drop}
-        sx={{
-          position: "absolute",
-          top: top - 2,
-          left: left - 2,
-          width: BUILDING_OVERLAY_WIDTH,
-          height: BUILDING_OVERLAY_HEIGHT,
-          borderWidth: 2,
-          borderStyle: "solid",
-          borderColor: "containerBorder.main",
-          cursor: "pointer",
-        }}
+        sx={[
+          {
+            position: "absolute",
+            top: top - 2,
+            left: left - 2,
+            width: BUILDING_OVERLAY_WIDTH,
+            height: BUILDING_OVERLAY_HEIGHT,
+            borderWidth: 2,
+            borderStyle: "solid",
+            borderColor: "containerBorder.main",
+            cursor: "pointer",
+          },
+          isDragging &&
+            canAssignVillager && {
+              borderColor: "containerBorder.light",
+            },
+        ]}
       >
         {/* ASSIGNED VILLAGERS */}
         <Grid
