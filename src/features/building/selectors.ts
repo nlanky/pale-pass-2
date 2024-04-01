@@ -20,6 +20,14 @@ export const {
   (state) => state.building,
 );
 
+export const selectBuildingNames = createSelector(
+  [selectBuildings],
+  (buildings) =>
+    buildings.map(
+      (building) => BUILDING_ID_TO_BUILDING[building.id].name,
+    ),
+);
+
 export const selectBuildingTier = createSelector(
   [selectBuildingById],
   (building) => building?.tier,

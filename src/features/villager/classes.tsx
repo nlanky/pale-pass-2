@@ -10,8 +10,11 @@ import {
 import type { SxProps } from "@mui/material";
 
 // LOCAL FILES
+// Constants
+import { NO_ATTRACTION_REQUIREMENTS } from "features/villager/constants";
 // Interfaces & Types
 import type {
+  VillagerAttractionRequirements,
   VillagerNew,
   VillagerSpecialty,
   VillagerStats,
@@ -30,16 +33,30 @@ export class Villager {
   specialty: VillagerSpecialty;
   /** @type {string} Path to image of villager */
   image: string;
+  /** @type {boolean} Whether villager can be attracted */
+  attractEnabled: boolean;
+  /** @type {VillagerAttractionRequirements} Requirements for villager to be attracted */
+  attractRequirements: VillagerAttractionRequirements;
 
   constructor(villager: VillagerNew) {
-    const { id, name, occupation, description, specialty, image } =
-      villager;
+    const {
+      id,
+      name,
+      occupation,
+      description,
+      specialty,
+      image,
+      attractEnabled,
+      attractRequirements = NO_ATTRACTION_REQUIREMENTS,
+    } = villager;
     this.id = id;
     this.name = name;
     this.occupation = occupation;
     this.description = description;
     this.specialty = specialty;
     this.image = image;
+    this.attractEnabled = attractEnabled;
+    this.attractRequirements = attractRequirements;
   }
 
   get startingStats(): VillagerStats {
@@ -108,5 +125,19 @@ export class Villager {
       default:
         return <></>;
     }
+  }
+
+  canAttract(buildings: string[], villagers: string[]) {
+    return (
+      this.attractEnabled &&
+      (this.attractRequirements.buildings.length === 0 ||
+        this.attractRequirements.buildings.filter((building) =>
+          buildings.includes(building),
+        ).length !== 0) &&
+      (this.attractRequirements.villagers.length === 0 ||
+        this.attractRequirements.villagers.filter((villager) =>
+          villagers.includes(villager),
+        ).length !== 0)
+    );
   }
 }

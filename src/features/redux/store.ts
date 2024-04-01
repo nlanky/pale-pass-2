@@ -1,5 +1,10 @@
 // PUBLIC MODULES
-import { combineReducers, configureStore } from "@reduxjs/toolkit";
+import {
+  combineReducers,
+  configureStore,
+  ThunkAction,
+  UnknownAction,
+} from "@reduxjs/toolkit";
 import {
   FLUSH,
   PAUSE,
@@ -60,3 +65,9 @@ export const persistor = persistStore(store, {
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
+export type AppThunk<ReturnType = void> = ThunkAction<
+  ReturnType,
+  RootState,
+  unknown,
+  UnknownAction
+>;

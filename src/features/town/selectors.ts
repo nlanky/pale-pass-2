@@ -9,12 +9,6 @@ import {
 } from "features/building/constants";
 // Redux
 import { selectBuildings } from "features/building/selectors";
-import { selectVillagerIds } from "features/villager/selectors";
-
-export const selectCurrentPopulation = createSelector(
-  [selectVillagerIds],
-  (villagerIds) => villagerIds.length,
-);
 
 export const selectMaxPopulation = createSelector(
   [selectBuildings],

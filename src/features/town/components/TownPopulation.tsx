@@ -11,10 +11,8 @@ import { StyledGrid } from "features/common/components";
 // Hooks
 import { useAppSelector } from "features/redux/hooks";
 // Redux
-import {
-  selectCurrentPopulation,
-  selectMaxPopulation,
-} from "features/town/selectors";
+import { selectMaxPopulation } from "features/town/selectors";
+import { selectCurrentPopulation } from "features/villager/selectors";
 
 export const TownPopulation: FC<{}> = () => {
   // Hooks

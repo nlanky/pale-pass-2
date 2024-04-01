@@ -14,8 +14,20 @@ export const {
   selectAll: selectVillagers,
   selectById: selectVillagerById,
   selectIds: selectVillagerIds,
+  selectTotal: selectCurrentPopulation,
 } = villagerAdapter.getSelectors<RootState>(
   (state) => state.villager,
+);
+
+export const selectLastAttractTurn = (state: RootState) =>
+  state.villager.lastAttractTurn;
+
+export const selectVillagerNames = createSelector(
+  [selectVillagers],
+  (villagers) =>
+    villagers.map(
+      (villager) => VILLAGER_ID_TO_VILLAGER[villager.id].name,
+    ),
 );
 
 // TODO: Remove this in favour of different system

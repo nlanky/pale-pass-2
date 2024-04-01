@@ -8,8 +8,8 @@ import { Button } from "@mui/material";
 // Hooks
 import { useAppDispatch, useAppSelector } from "features/redux/hooks";
 // Redux
-import { setTurn } from "features/system/actions";
 import { selectTurn } from "features/system/selectors";
+import { setTurnThunk } from "features/system/systemSlice";
 
 export const NextTurnButton: FC<{}> = () => {
   // Hooks
@@ -18,7 +18,7 @@ export const NextTurnButton: FC<{}> = () => {
 
   // Handlers
   const onNextTurn = () => {
-    dispatch(setTurn(turn + 1));
+    dispatch(setTurnThunk(turn + 1));
   };
 
   return (

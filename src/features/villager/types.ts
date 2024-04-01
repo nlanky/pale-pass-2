@@ -19,19 +19,20 @@ export type VillagerStat = (typeof VILLAGER_STATS)[number];
 
 export type VillagerStats = Record<VillagerStat, number>;
 
+export interface VillagerAttractionRequirements {
+  buildings: string[];
+  villagers: string[];
+}
+
 export interface VillagerNew {
-  /** @type {number} Unique identifier for villager */
   id: number;
-  /** @type {string} Name of villager */
   name: string;
-  /** @type {string} Occupation of villager (flavour text) */
   occupation: string;
-  /** @type {string} Description of villager and what they do */
   description: string;
-  /** @type {string} Path to image of villager */
   image: string;
-  /** @type {VillagerSpecialty} Specialty dictates starting/max stats */
   specialty: VillagerSpecialty;
+  attractEnabled: boolean;
+  attractRequirements?: VillagerAttractionRequirements;
 }
 
 export interface TownVillager {
