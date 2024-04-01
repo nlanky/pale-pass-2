@@ -90,3 +90,5 @@ export const RESOURCE_TO_TRADE_RATES: Record<Resource, Resources> = {
     Amethyst: 1,
   },
 };
+
+export const RESOURCE_VIEW_ROW_HEIGHT = 45;

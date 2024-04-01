@@ -29,6 +29,7 @@ import { BUILDING_ID_TO_BUILDING } from "features/building/constants";
 import {
   type Resource,
   RESOURCE_TO_IMAGE,
+  RESOURCE_VIEW_ROW_HEIGHT,
 } from "features/resource/constants";
 // Hooks
 import { useAppSelector } from "features/redux/hooks";
@@ -62,17 +63,24 @@ const ResourceViewRow: FC<ResourceViewRowProps> = ({
   const building = BUILDING_ID_TO_BUILDING[buildingId];
 
   return (
-    <TableRow>
-      <TableCell>{building.name}</TableCell>
-      <TableCell>{tier || "-"}</TableCell>
+    <TableRow sx={{ height: RESOURCE_VIEW_ROW_HEIGHT }}>
       <TableCell>
-        {assignedVillagerIds.length === 0 && "-"}
+        <Typography variant="body1">{building.name}</Typography>
+      </TableCell>
+      <TableCell>
+        <Typography variant="body1">{tier || "-"}</Typography>
+      </TableCell>
+      <TableCell>
+        {assignedVillagerIds.length === 0 && (
+          <Typography variant="body1">-</Typography>
+        )}
         {assignedVillagerIds.length !== 0 && (
           <Grid container spacing={1}>
             {assignedVillagerIds.map((villagerId) => (
               <Grid item key={villagerId}>
                 <VillagerAvatar
                   villagerId={villagerId}
+                  size={32}
                   canDrag={false}
                   hasBorder={false}
                 />
@@ -152,13 +160,25 @@ export const ResourceView = () => {
       >
         <Button onClick={onBack}>Back to Town</Button>
         <TableContainer sx={{ mt: 1 }}>
-          <Table stickyHeader>
+          <Table size="small" stickyHeader>
             <TableHead>
-              <TableRow>
-                <TableCell>Building</TableCell>
-                <TableCell>Tier</TableCell>
-                <TableCell>Villagers Assigned</TableCell>
-                <TableCell>Resources Per Turn</TableCell>
+              <TableRow sx={{ height: RESOURCE_VIEW_ROW_HEIGHT }}>
+                <TableCell>
+                  <Typography variant="body1">Building</Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography variant="body1">Tier</Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography variant="body1">
+                    Villagers Assigned
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography variant="body1">
+                    Resources Per Turn
+                  </Typography>
+                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
