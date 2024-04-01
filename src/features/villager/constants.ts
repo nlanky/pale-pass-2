@@ -56,6 +56,10 @@ import {
 // Interfaces & Types
 import type { VillagerAttractionRequirements } from "features/villager/types";
 
+export const MAX_VILLAGER_STAT = 100;
+
+export const MAX_VILLAGER_STAT_WITHOUT_SPECIALTY = 30;
+
 export const NO_ATTRACTION_REQUIREMENTS: VillagerAttractionRequirements =
   {
     buildings: [],

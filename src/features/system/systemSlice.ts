@@ -1,12 +1,12 @@
 // PUBLIC MODULES
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, type Update } from "@reduxjs/toolkit";
 
 // LOCAL FILES
 // Constants
 import { TURNS_PER_ATTRACT } from "features/system/constants";
-import { VILLAGER_ID_TO_VILLAGER } from "features/villager/constants";
 // Interfaces & Types
 import type { AppThunk } from "features/redux/store";
+import type { TownVillager } from "features/villager/types";
 // Redux
 import { selectBuildingNames } from "features/building/selectors";
 import { setTurn } from "features/system/actions";
@@ -14,13 +14,21 @@ import { selectMaxPopulation } from "features/town/selectors";
 import {
   selectCurrentPopulation,
   selectLastAttractTurn,
+  selectVillagerById,
   selectVillagerIds,
   selectVillagerNames,
 } from "features/villager/selectors";
 import {
   addVillager,
   updateLastAttractTurn,
+  updateVillagers,
 } from "features/villager/villagerSlice";
+import { selectVillagerAssignments } from "features/villagerBuilding/selectors";
+// Utility functions
+import {
+  getVillagerToAttract,
+  trainVillager,
+} from "features/villager/utils";
 
 interface SystemState {
   turn: number;
@@ -60,26 +68,12 @@ export const setTurnThunk =
       const villagerIds = selectVillagerIds(state);
       const buildingNames = selectBuildingNames(state);
       const villagerNames = selectVillagerNames(state);
-      const villagerAttractPool = Object.values(
-        VILLAGER_ID_TO_VILLAGER,
-      ).filter((villager) => {
-        // Villager in town
-        if (villagerIds.includes(villager.id)) {
-          return false;
-        }
-
-        // Villager requirements not met
-        if (!villager.canAttract(buildingNames, villagerNames)) {
-          return false;
-        }
-
-        return true;
-      });
-      if (villagerAttractPool.length !== 0) {
-        const villagerAttracted =
-          villagerAttractPool[
-            Math.floor(Math.random() * villagerAttractPool.length)
-          ];
+      const villagerAttracted = getVillagerToAttract(
+        villagerIds,
+        buildingNames,
+        villagerNames,
+      );
+      if (villagerAttracted) {
         dispatch(
           addVillager({
             id: villagerAttracted.id,
@@ -90,5 +84,22 @@ export const setTurnThunk =
       }
     }
 
+    // Train villagers
+    const villagerUpdates: Update<TownVillager, number>[] = [];
+    const villagerAssignments = selectVillagerAssignments(state);
+    villagerAssignments.forEach((assignment) => {
+      const { villagerId, buildingId } = assignment;
+      const updatedVillager = trainVillager(
+        selectVillagerById(state, villagerId),
+        buildingId,
+      );
+      villagerUpdates.push({
+        id: updatedVillager.id,
+        changes: { stats: updatedVillager.stats },
+      });
+    });
+    dispatch(updateVillagers(villagerUpdates));
+
+    // Finally, update turn
     dispatch(setTurn(turn));
   };
