@@ -131,7 +131,7 @@ export const BuildingOverlay: FC<BuildingOverlayProps> = ({
                 villagerId={villagerId}
                 size={BUILDING_OVERLAY_AVATAR_SIZE}
                 borderColor="containerBorder.light"
-                hasDialog={false}
+                canClick={false}
               />
             </Grid>
           ))}

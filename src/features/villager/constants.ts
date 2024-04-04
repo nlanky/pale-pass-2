@@ -54,11 +54,27 @@ import {
   villager49Image,
 } from "assets/villager";
 // Interfaces & Types
-import type { VillagerAttractionRequirements } from "features/villager/types";
+import type {
+  VillagerAttractionRequirements,
+  VillagerSpecialty,
+  VillagerStat,
+} from "features/villager/types";
 
 export const MAX_VILLAGER_STAT = 100;
 
 export const MAX_VILLAGER_STAT_WITHOUT_SPECIALTY = 30;
+
+export const VILLAGER_STAT_TO_SPECIALTY: Record<
+  VillagerStat,
+  VillagerSpecialty
+> = {
+  Building: "Builder",
+  Combat: "Soldier",
+  Gathering: "Gatherer",
+  Healing: "Healer",
+  Scouting: "Scout",
+  Spycraft: "Spy",
+};
 
 export const NO_ATTRACTION_REQUIREMENTS: VillagerAttractionRequirements =
   {

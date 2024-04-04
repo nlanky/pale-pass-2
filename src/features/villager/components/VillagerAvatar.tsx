@@ -1,13 +1,12 @@
 // REACT
-import { type FC, useContext, useEffect, useState } from "react";
+import { type FC, useContext, useEffect } from "react";
 
 // PUBLIC MODULES
 import { Avatar } from "@mui/material";
 import { useDrag } from "react-dnd";
+import { useNavigate } from "react-router-dom";
 
 // LOCAL FILES
-// Components
-import { VillagerDialog } from "features/villager/components";
 // Constants
 import { VILLAGER_ID_TO_VILLAGER } from "features/villager/constants";
 // Context
@@ -19,7 +18,7 @@ interface VillagerAvatarProps {
   canDrag?: boolean;
   hasBorder?: boolean;
   borderColor?: string;
-  hasDialog?: boolean;
+  canClick?: boolean;
 }
 
 export const VillagerAvatar: FC<VillagerAvatarProps> = ({
@@ -28,9 +27,10 @@ export const VillagerAvatar: FC<VillagerAvatarProps> = ({
   canDrag = true,
   hasBorder = true,
   borderColor = "white",
-  hasDialog = true,
+  canClick = true,
 }) => {
   // Hooks
+  const navigate = useNavigate();
   const [{ isDragging }, drag] = useDrag(
     () => ({
       canDrag,
@@ -49,9 +49,6 @@ export const VillagerAvatar: FC<VillagerAvatarProps> = ({
   // Context
   const { setDragging } = useContext(DraggingVillagerContext);
 
-  // Local state
-  const [dialogOpen, setDialogOpen] = useState(false);
-
   // Effects
   useEffect(() => {
     setDragging(isDragging);
@@ -61,35 +58,24 @@ export const VillagerAvatar: FC<VillagerAvatarProps> = ({
   const villager = VILLAGER_ID_TO_VILLAGER[villagerId];
 
   // Handlers
-  const onDoubleClick = () => {
-    setDialogOpen(true);
-  };
-
-  const onDialogClose = () => {
-    setDialogOpen(false);
+  const onClick = () => {
+    navigate(`/villager/${villagerId}`);
   };
 
   return (
-    <>
-      <Avatar
-        onDoubleClick={hasDialog ? onDoubleClick : undefined}
-        ref={drag}
-        src={villager.image}
-        sx={{
-          width: size,
-          height: size,
-          borderWidth: hasBorder ? 2 : 0,
-          borderStyle: "solid",
-          borderColor,
-          opacity: isDragging ? 0 : 1,
-          cursor: "pointer",
-        }}
-      />
-      <VillagerDialog
-        villager={villager}
-        open={dialogOpen}
-        onClose={onDialogClose}
-      />
-    </>
+    <Avatar
+      onClick={canClick ? onClick : undefined}
+      ref={drag}
+      src={villager.image}
+      sx={{
+        width: size,
+        height: size,
+        borderWidth: hasBorder ? 2 : 0,
+        borderStyle: "solid",
+        borderColor,
+        opacity: isDragging ? 0 : 1,
+        cursor: "pointer",
+      }}
+    />
   );
 };

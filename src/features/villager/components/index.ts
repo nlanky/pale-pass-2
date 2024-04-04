@@ -1,2 +1,2 @@
 export * from "features/villager/components/VillagerAvatar";
-export * from "features/villager/components/VillagerDialog";
+export * from "features/villager/components/VillagerView";
