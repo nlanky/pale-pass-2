@@ -33,11 +33,11 @@ export const BUILDING_OVERLAY_AVATAR_SIZE = 32;
 
 // Fits three villager avatars + border
 export const BUILDING_OVERLAY_WIDTH =
-  BUILDING_OVERLAY_AVATAR_SIZE * 3 + 2 * 2;
+  BUILDING_OVERLAY_AVATAR_SIZE * 3 + 2 * 3;
 
 // Fits two villager avatars + border
 export const BUILDING_OVERLAY_HEIGHT =
-  BUILDING_OVERLAY_AVATAR_SIZE * 2 + 2 * 2;
+  BUILDING_OVERLAY_AVATAR_SIZE * 2 + 2 * 3;
 
 export const BUILDING_ID_TO_BUILDING: Record<number, Building> = {
   1: new Building({

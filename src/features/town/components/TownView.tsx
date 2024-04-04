@@ -102,7 +102,7 @@ export const TownView = () => {
           </Grid>
 
           <Grid container direction="column" item xs={2}>
-            <TownResources />
+            <TownResources direction="column" />
 
             <Grid item sx={{ mt: 1 }}>
               <TownPopulation />

@@ -23,6 +23,7 @@ import {
   StyledContainer,
   StyledGrid,
 } from "features/common/components";
+import { TownResources } from "features/resource/components";
 import { VillagerAvatar } from "features/villager/components";
 // Constants
 import { BUILDING_ID_TO_BUILDING } from "features/building/constants";
@@ -159,7 +160,10 @@ export const ResourceView = () => {
         sx={{ p: 1 }}
       >
         <Button onClick={onBack}>Back to Town</Button>
-        <TableContainer sx={{ mt: 1 }}>
+
+        <TownResources direction="row" hideBorder />
+
+        <TableContainer>
           <Table size="small" stickyHeader>
             <TableHead>
               <TableRow sx={{ height: RESOURCE_VIEW_ROW_HEIGHT }}>

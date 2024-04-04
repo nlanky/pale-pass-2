@@ -103,12 +103,12 @@ export const BuildingOverlay: FC<BuildingOverlayProps> = ({
         sx={[
           {
             position: "absolute",
-            top: top - 2,
-            left: left - 2,
+            top: top - 3,
+            left: left - 3,
             width: BUILDING_OVERLAY_WIDTH,
             height: BUILDING_OVERLAY_HEIGHT,
-            borderWidth: 2,
-            borderStyle: "solid",
+            borderWidth: 3,
+            borderStyle: "ridge",
             borderColor: "containerBorder.main",
             cursor: "pointer",
           },
@@ -130,6 +130,7 @@ export const BuildingOverlay: FC<BuildingOverlayProps> = ({
               <VillagerAvatar
                 villagerId={villagerId}
                 size={BUILDING_OVERLAY_AVATAR_SIZE}
+                borderColor="containerBorder.light"
                 hasDialog={false}
               />
             </Grid>
