@@ -3,7 +3,10 @@ import { createSelector } from "@reduxjs/toolkit";
 
 // LOCAL FILES
 // Constants
-import { BUILDING_ID_TO_BUILDING } from "features/building/constants";
+import {
+  BUILDING_ID_TO_BUILDING,
+  POPULATION_PER_BUILDING_TIER,
+} from "features/building/constants";
 // Interfaces & Types
 import type { RootState } from "features/redux/store";
 // Redux
@@ -64,5 +67,21 @@ export const selectCanAssignVillagerToBuilding = createSelector(
       assignedVillagerIds.length + 1 <= building.tier &&
       BUILDING_ID_TO_BUILDING[building.id].canAssignVillagers
     );
+  },
+);
+
+export const selectMaxPopulation = createSelector(
+  [selectBuildings],
+  (buildings) => {
+    const populationBuildings = buildings.filter((building) =>
+      BUILDING_ID_TO_BUILDING[building.id].effects.includes(
+        "INCREASE_POPULATION",
+      ),
+    );
+    let maxPopulation = 0;
+    populationBuildings.forEach((building) => {
+      maxPopulation += building.tier * POPULATION_PER_BUILDING_TIER;
+    });
+    return maxPopulation;
   },
 );

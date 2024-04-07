@@ -2,32 +2,37 @@
 import { type FC, useContext, useEffect } from "react";
 
 // PUBLIC MODULES
-import { Avatar } from "@mui/material";
+import { Avatar, Tooltip, Typography } from "@mui/material";
 import { useDrag } from "react-dnd";
 import { useNavigate } from "react-router-dom";
 
 // LOCAL FILES
 // Constants
-import { VILLAGER_ID_TO_VILLAGER } from "features/villager/constants";
+import {
+  DEFAULT_VILLAGER_AVATAR_SIZE,
+  VILLAGER_ID_TO_VILLAGER,
+} from "features/villager/constants";
 // Context
 import { DraggingVillagerContext } from "features/town/context";
 
 interface VillagerAvatarProps {
   villagerId: number;
   size?: number;
-  canDrag?: boolean;
-  hasBorder?: boolean;
-  borderColor?: string;
   canClick?: boolean;
+  canDrag?: boolean;
+  showBorder?: boolean;
+  borderColor?: string;
+  showTooltip?: boolean;
 }
 
 export const VillagerAvatar: FC<VillagerAvatarProps> = ({
   villagerId,
-  size = 40,
-  canDrag = true,
-  hasBorder = true,
-  borderColor = "white",
+  size = DEFAULT_VILLAGER_AVATAR_SIZE,
   canClick = true,
+  canDrag = true,
+  showBorder = true,
+  borderColor = "white",
+  showTooltip = true,
 }) => {
   // Hooks
   const navigate = useNavigate();
@@ -63,19 +68,27 @@ export const VillagerAvatar: FC<VillagerAvatarProps> = ({
   };
 
   return (
-    <Avatar
-      onClick={canClick ? onClick : undefined}
-      ref={drag}
-      src={villager.image}
-      sx={{
-        width: size,
-        height: size,
-        borderWidth: hasBorder ? 2 : 0,
-        borderStyle: "solid",
-        borderColor,
-        opacity: isDragging ? 0 : 1,
-        cursor: "pointer",
-      }}
-    />
+    <Tooltip
+      title={
+        showTooltip ? (
+          <Typography variant="body1">{villager.title}</Typography>
+        ) : undefined
+      }
+    >
+      <Avatar
+        onClick={canClick ? onClick : undefined}
+        ref={drag}
+        src={villager.image}
+        sx={{
+          width: size,
+          height: size,
+          borderWidth: showBorder ? 2 : 0,
+          borderStyle: "solid",
+          borderColor,
+          opacity: isDragging ? 0 : 1,
+          cursor: canClick || canDrag ? "pointer" : "auto",
+        }}
+      />
+    </Tooltip>
   );
 };

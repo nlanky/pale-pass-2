@@ -23,7 +23,6 @@ import storage from "redux-persist/lib/storage";
 import { buildingReducer } from "features/building/buildingSlice";
 import { resourceReducer } from "features/resource/resourceSlice";
 import { systemReducer } from "features/system/systemSlice";
-import { townReducer } from "features/town/townSlice";
 import { villagerReducer } from "features/villager/villagerSlice";
 import { villagerBuildingReducer } from "features/villagerBuilding/villagerBuildingSlice";
 
@@ -31,7 +30,6 @@ const rootReducer = combineReducers({
   building: buildingReducer,
   resource: resourceReducer,
   system: systemReducer,
-  town: townReducer,
   villager: villagerReducer,
   villagerBuilding: villagerBuildingReducer,
 });

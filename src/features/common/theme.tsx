@@ -1,9 +1,17 @@
+// REACT
+import { forwardRef } from "react";
+
 // PUBLIC MODULES
 import {
+  type LinkProps,
   type PaletteColor,
   type PaletteColorOptions,
   createTheme,
 } from "@mui/material";
+import {
+  Link as RouterLink,
+  LinkProps as RouterLinkProps,
+} from "react-router-dom";
 
 declare module "@mui/material/styles" {
   interface ExtendedTheme {
@@ -18,6 +26,16 @@ const createColour = (mainColour: string) =>
   defaultTheme.palette.augmentColor({ color: { main: mainColour } });
 const gap = (spacing: number) =>
   parseInt(defaultTheme.spacing(spacing), 10);
+
+// Use MUI theming on React Router Link component
+const LinkBehaviour = forwardRef<
+  HTMLAnchorElement,
+  Omit<RouterLinkProps, "to"> & { href: RouterLinkProps["to"] }
+>((props, ref) => {
+  const { href, ...other } = props;
+  // Map href (Material UI) -> to (react-router)
+  return <RouterLink ref={ref} to={href} {...other} />;
+});
 
 export const theme = createTheme({
   components: {
@@ -36,10 +54,19 @@ export const theme = createTheme({
         }),
       },
     },
+    MuiButtonBase: {
+      defaultProps: { LinkComponent: LinkBehaviour },
+    },
     MuiContainer: {
       defaultProps: {
         maxWidth: "lg",
       },
+    },
+    MuiLink: {
+      defaultProps: {
+        color: "containerBorder.main",
+        component: LinkBehaviour,
+      } as LinkProps,
     },
     MuiTooltip: {
       defaultProps: {

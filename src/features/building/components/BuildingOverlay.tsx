@@ -128,6 +128,7 @@ export const BuildingOverlay: FC<BuildingOverlayProps> = ({
               size={BUILDING_OVERLAY_AVATAR_SIZE}
               borderColor="containerBorder.light"
               canClick={false}
+              showTooltip={false}
             />
           </Grid>
         ))}

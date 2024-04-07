@@ -7,6 +7,7 @@ import { villagerBuildingAdapter } from "features/villagerBuilding/villagerBuild
 export const {
   selectAll: selectVillagerAssignments,
   selectById: selectVillagerAssignmentById,
+  selectEntities: selectVillagerIdToAssignment,
   selectIds: selectAssignedVillagerIds,
 } = villagerBuildingAdapter.getSelectors<RootState>(
   (state) => state.villagerBuilding,

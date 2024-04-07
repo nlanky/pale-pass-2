@@ -2,8 +2,10 @@
 import type { FC } from "react";
 
 // PUBLIC MODULES
+import { ArrowDownward, ArrowUpward } from "@mui/icons-material";
 import {
   Grid,
+  Link,
   Table,
   TableBody,
   TableContainer,
@@ -12,7 +14,6 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import { ArrowDownward, ArrowUpward } from "@mui/icons-material";
 
 // LOCAL FILES
 // Components
@@ -23,7 +24,7 @@ import {
   StyledGrid,
 } from "features/common/components";
 import { TownResources } from "features/resource/components";
-import { VillagerAvatar } from "features/villager/components";
+import { AssignedVillagers } from "features/villager/components";
 // Constants
 import { BUILDING_ID_TO_BUILDING } from "features/building/constants";
 import {
@@ -32,7 +33,7 @@ import {
   RESOURCE_VIEW_ROW_HEIGHT,
 } from "features/resource/constants";
 // Hooks
-import { useAppSelector } from "features/redux/hooks";
+import { useAppDispatch, useAppSelector } from "features/redux/hooks";
 // Redux
 import {
   selectBuildingIds,
@@ -40,6 +41,7 @@ import {
   selectVillagerIdsAssignedToBuilding,
 } from "features/building/selectors";
 import { selectBuildingResourcesPerTurn } from "features/resource/selectors";
+import { assignVillager } from "features/villagerBuilding/villagerBuildingSlice";
 
 interface ResourceViewRowProps {
   buildingId: number;
@@ -49,6 +51,7 @@ const ResourceViewRow: FC<ResourceViewRowProps> = ({
   buildingId,
 }) => {
   // Hooks
+  const dispatch = useAppDispatch();
   const tier = useAppSelector((state) =>
     selectBuildingTier(state, buildingId),
   );
@@ -62,32 +65,28 @@ const ResourceViewRow: FC<ResourceViewRowProps> = ({
   // Derived variables
   const building = BUILDING_ID_TO_BUILDING[buildingId];
 
+  // Handlers
+  const onAssign = (villagerId: number) => {
+    dispatch(assignVillager({ villagerId, buildingId }));
+  };
+
   return (
     <TableRow sx={{ height: RESOURCE_VIEW_ROW_HEIGHT }}>
       <TableCell>
-        <Typography variant="body1">{building.name}</Typography>
+        <Link href={`/building/${building.id}`} variant="body1">
+          {building.name}
+        </Link>
       </TableCell>
       <TableCell>
         <Typography variant="body1">{tier || "-"}</Typography>
       </TableCell>
       <TableCell>
-        {assignedVillagerIds.length === 0 && (
-          <Typography variant="body1">-</Typography>
-        )}
-        {assignedVillagerIds.length !== 0 && (
-          <Grid container spacing={1}>
-            {assignedVillagerIds.map((villagerId) => (
-              <Grid item key={villagerId}>
-                <VillagerAvatar
-                  villagerId={villagerId}
-                  size={32}
-                  canDrag={false}
-                  hasBorder={false}
-                />
-              </Grid>
-            ))}
-          </Grid>
-        )}
+        <AssignedVillagers
+          assignedVillagerIds={assignedVillagerIds}
+          maxAssignedVillagers={tier}
+          onVillagerAssign={onAssign}
+          villagerAvatarSize={32}
+        />
       </TableCell>
       <TableCell>
         <Grid alignItems="center" container wrap="nowrap">

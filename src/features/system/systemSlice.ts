@@ -11,10 +11,10 @@ import type { TownVillager } from "features/villager/types";
 import {
   selectBuildingNames,
   selectBuildings,
+  selectMaxPopulation,
 } from "features/building/selectors";
 import { updateResources } from "features/resource/resourceSlice";
 import { setTurn } from "features/system/actions";
-import { selectMaxPopulation } from "features/town/selectors";
 import {
   selectCurrentPopulation,
   selectLastAttractTurn,

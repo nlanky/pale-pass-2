@@ -1,5 +1,11 @@
 // PUBLIC MODULES
-import { Container, Grid, Tooltip, Typography } from "@mui/material";
+import {
+  Button,
+  Container,
+  Grid,
+  Tooltip,
+  Typography,
+} from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
 
 // LOCAL FILES
@@ -14,13 +20,15 @@ import {
 } from "features/villager/constants";
 import { VILLAGER_STATS } from "features/villager/types";
 // Hooks
-import { useAppSelector } from "features/redux/hooks";
+import { useAppDispatch, useAppSelector } from "features/redux/hooks";
 // Redux
 import { selectVillagerById } from "features/villager/selectors";
 import { selectVillagerAssignmentById } from "features/villagerBuilding/selectors";
+import { unassignVillager } from "features/villagerBuilding/villagerBuildingSlice";
 
 export const VillagerView = () => {
   // Hooks
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   // Router
@@ -43,6 +51,11 @@ export const VillagerView = () => {
     selectVillagerAssignmentById(state, villagerId),
   );
 
+  // Handlers
+  const onUnassign = () => {
+    dispatch(unassignVillager(villagerId));
+  };
+
   return (
     <Container maxWidth="lg">
       <StyledGrid
@@ -59,7 +72,8 @@ export const VillagerView = () => {
               villagerId={villagerId}
               size={200}
               canDrag={false}
-              hasBorder={false}
+              showBorder={false}
+              showTooltip={false}
             />
           </Grid>
 
@@ -99,6 +113,7 @@ export const VillagerView = () => {
               <Grid
                 container
                 direction="column"
+                item
                 sx={{ ml: 2 }}
                 xs={2}
               >
@@ -131,6 +146,12 @@ export const VillagerView = () => {
             </Grid>
           </Grid>
         </Grid>
+
+        {assignment && (
+          <Button onClick={onUnassign} sx={{ mt: 1 }}>
+            Unassign
+          </Button>
+        )}
       </StyledGrid>
     </Container>
   );

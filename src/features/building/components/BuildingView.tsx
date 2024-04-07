@@ -1,5 +1,11 @@
 // PUBLIC MODULES
-import { Button, Container, Grid, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Container,
+  Grid,
+  Typography,
+} from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
 
 // LOCAL FILES
@@ -10,6 +16,7 @@ import {
   StyledGrid,
 } from "features/common/components";
 import { ResourceTrade } from "features/resource/components";
+import { AssignedVillagers } from "features/villager/components";
 // Constants
 import { BUILDING_ID_TO_BUILDING } from "features/building/constants";
 // Hooks
@@ -23,7 +30,9 @@ import {
   selectBuildingDescription,
   selectBuildingImage,
   selectBuildingTier,
+  selectVillagerIdsAssignedToBuilding,
 } from "features/building/selectors";
+import { assignVillager } from "features/villagerBuilding/villagerBuildingSlice";
 
 export const BuildingView = () => {
   // Hooks
@@ -51,8 +60,15 @@ export const BuildingView = () => {
   const description = useAppSelector((state) =>
     selectBuildingDescription(state, buildingId),
   );
+  const assignedVillagerIds = useAppSelector((state) =>
+    selectVillagerIdsAssignedToBuilding(state, buildingId),
+  );
 
   // Handlers
+  const onAssign = (villagerId: number) => {
+    dispatch(assignVillager({ villagerId, buildingId }));
+  };
+
   const onBuild = () => {
     dispatch(addBuilding({ id: buildingId, tier: 1 }));
   };
@@ -80,13 +96,35 @@ export const BuildingView = () => {
       >
         <BackButton />
 
-        <Typography component="h1" sx={{ mb: 1 }} variant="h4">
-          {building.name}
-        </Typography>
-
-        <Grid container>
+        <Grid container flexWrap="nowrap" sx={{ mt: 2 }}>
           <Grid item xs={9}>
-            <Typography variant="body1">{description}</Typography>
+            <Typography component="h1" variant="h4">
+              {building.name}
+            </Typography>
+
+            <Typography sx={{ mt: 1 }} variant="body1">
+              {description}
+            </Typography>
+
+            {building.canAssignVillagers && (
+              <>
+                <Typography
+                  component="h2"
+                  sx={{ mt: 1 }}
+                  variant="h5"
+                >
+                  Villagers Assigned
+                </Typography>
+
+                <Box sx={{ mt: 1 }}>
+                  <AssignedVillagers
+                    assignedVillagerIds={assignedVillagerIds}
+                    maxAssignedVillagers={currentTier}
+                    onVillagerAssign={onAssign}
+                  />
+                </Box>
+              </>
+            )}
           </Grid>
 
           <Grid item xs={3}>

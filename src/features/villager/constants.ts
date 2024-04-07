@@ -82,6 +82,8 @@ export const NO_ATTRACTION_REQUIREMENTS: VillagerAttractionRequirements =
     villagers: [],
   };
 
+export const DEFAULT_VILLAGER_AVATAR_SIZE = 40;
+
 export const VILLAGER_ID_TO_VILLAGER: Record<number, Villager> = {
   1: new Villager({
     id: 1,
