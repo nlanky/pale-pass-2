@@ -3,7 +3,6 @@ import type { FC } from "react";
 
 // PUBLIC MODULES
 import {
-  Button,
   Grid,
   Table,
   TableBody,
@@ -14,11 +13,11 @@ import {
   Typography,
 } from "@mui/material";
 import { ArrowDownward, ArrowUpward } from "@mui/icons-material";
-import { useNavigate } from "react-router-dom";
 
 // LOCAL FILES
 // Components
 import {
+  BackButton,
   Image,
   StyledContainer,
   StyledGrid,
@@ -141,15 +140,9 @@ const ResourceViewRow: FC<ResourceViewRowProps> = ({
 
 export const ResourceView = () => {
   // Hooks
-  const navigate = useNavigate();
   const buildingIds = useAppSelector((state) =>
     selectBuildingIds(state),
   );
-
-  // Handlers
-  const onBack = () => {
-    navigate("/town");
-  };
 
   return (
     <StyledContainer>
@@ -159,7 +152,7 @@ export const ResourceView = () => {
         direction="column"
         sx={{ p: 1 }}
       >
-        <Button onClick={onBack}>Back to Town</Button>
+        <BackButton />
 
         <TownResources direction="row" hideBorder />
 

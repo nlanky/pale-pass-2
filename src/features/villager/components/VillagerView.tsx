@@ -1,16 +1,10 @@
 // PUBLIC MODULES
-import {
-  Button,
-  Container,
-  Grid,
-  Tooltip,
-  Typography,
-} from "@mui/material";
+import { Container, Grid, Tooltip, Typography } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
 
 // LOCAL FILES
 // Components
-import { StyledGrid } from "features/common/components";
+import { BackButton, StyledGrid } from "features/common/components";
 import { VillagerAvatar } from "features/villager/components";
 // Constants
 import { BUILDING_ID_TO_BUILDING } from "features/building/constants";
@@ -49,11 +43,6 @@ export const VillagerView = () => {
     selectVillagerAssignmentById(state, villagerId),
   );
 
-  // Handlers
-  const onBackClick = () => {
-    navigate("/town");
-  };
-
   return (
     <Container maxWidth="lg">
       <StyledGrid
@@ -62,7 +51,7 @@ export const VillagerView = () => {
         direction="column"
         sx={{ p: 1 }}
       >
-        <Button onClick={onBackClick}>Back to Town</Button>
+        <BackButton />
 
         <Grid container flexWrap="nowrap" sx={{ mt: 2 }}>
           <Grid item>

@@ -4,7 +4,11 @@ import { useNavigate, useParams } from "react-router-dom";
 
 // LOCAL FILES
 // Components
-import { Image, StyledGrid } from "features/common/components";
+import {
+  BackButton,
+  Image,
+  StyledGrid,
+} from "features/common/components";
 import { ResourceTrade } from "features/resource/components";
 // Constants
 import { BUILDING_ID_TO_BUILDING } from "features/building/constants";
@@ -49,10 +53,6 @@ export const BuildingView = () => {
   );
 
   // Handlers
-  const onBackClick = () => {
-    navigate("/town");
-  };
-
   const onBuild = () => {
     dispatch(addBuilding({ id: buildingId, tier: 1 }));
   };
@@ -78,9 +78,7 @@ export const BuildingView = () => {
         direction="column"
         sx={{ p: 1 }}
       >
-        <Button onClick={onBackClick} sx={{ mb: 1 }}>
-          Back to Town
-        </Button>
+        <BackButton />
 
         <Typography component="h1" sx={{ mb: 1 }} variant="h4">
           {building.name}

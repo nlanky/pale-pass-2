@@ -2,7 +2,7 @@
 import { type FC, useContext, useState, useEffect } from "react";
 
 // PUBLIC MODULES
-import { Box, Grid, Tooltip } from "@mui/material";
+import { Grid, Tooltip } from "@mui/material";
 import { useDrop } from "react-dnd";
 import { useNavigate } from "react-router-dom";
 
@@ -95,7 +95,10 @@ export const BuildingOverlay: FC<BuildingOverlayProps> = ({
       open={tooltipShowing}
       title={<BuildingTooltip building={building} />}
     >
-      <Box
+      {/* ASSIGNED VILLAGERS */}
+      <Grid
+        container
+        justifyContent="center"
         onClick={() => {
           navigate(`/building/${building.id}`);
         }}
@@ -118,25 +121,17 @@ export const BuildingOverlay: FC<BuildingOverlayProps> = ({
             },
         ]}
       >
-        {/* ASSIGNED VILLAGERS */}
-        <Grid
-          container
-          sx={{
-            position: "absolute",
-          }}
-        >
-          {assignedVillagerIds.map((villagerId) => (
-            <Grid key={villagerId} item>
-              <VillagerAvatar
-                villagerId={villagerId}
-                size={BUILDING_OVERLAY_AVATAR_SIZE}
-                borderColor="containerBorder.light"
-                canClick={false}
-              />
-            </Grid>
-          ))}
-        </Grid>
-      </Box>
+        {assignedVillagerIds.map((villagerId) => (
+          <Grid key={villagerId} item>
+            <VillagerAvatar
+              villagerId={villagerId}
+              size={BUILDING_OVERLAY_AVATAR_SIZE}
+              borderColor="containerBorder.light"
+              canClick={false}
+            />
+          </Grid>
+        ))}
+      </Grid>
     </Tooltip>
   );
 };
